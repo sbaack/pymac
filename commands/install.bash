@@ -18,6 +18,8 @@ download_installer() {
   local pkg="$2"
   local cache_dir
   cache_dir="$(pymac_dir)/cache"
+  # Make sure cache dir exists
+  mkdir -p "$cache_dir"
   local url
   # If a Python dev version was provided (e.g. 3.11.0a6), extract
   # the version number without the appended 'aX', 'bX' or 'rcX'
