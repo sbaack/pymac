@@ -2,9 +2,9 @@ function __list-latest-versions
     # For 'pymac install': Autocomplete Major.Minor versions listed in $PYMAC_ROOT/latest_versions
     set -l pymac_dir
     if test -n "$PYMAC_ROOT"
-        set pymac_dir=$PYMAC_ROOT
+        set pymac_dir $PYMAC_ROOT
     else
-        set pymac_dir=~/.pymac
+        set pymac_dir ~/.pymac
     end
     set -l py_versions $pymac_dir/latest_versions/*
 
