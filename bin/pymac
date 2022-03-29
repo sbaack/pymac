@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+# Load common helper functions
+. "$(dirname "$(dirname "$0")")/lib/utils.bash"
+
+help() {
+  printf "Install and manage Python.org Mac installers from the command line.\n\n"
+  printf "Usage: pymac <command> [<args>]\n\n"
+  printf "Commands:\n"
+  printf "  add-certs:     Install and symlink SSL certificates in specified Python version\n"
+  printf "  clear-cache:   Delete downloaded PKG installers\n"
+  printf "  default:       Set Python version symlinked to ~/.config/pymac/default\n"
+  printf "  default-which: Show path to Python version symlinked to ~/.config/pymac/default\n"
+  printf "  exec:          Directly call specified Python version\n"
+  printf "  install:       Download and (re)install Python version\n"
+  printf "  list:          List Python versions installed via Python.org installer\n"
+  printf "  pyenv:         Manage symlinks of Python.org installations in \$PYENV_ROOT/versions\n"
+  printf "  uninstall:     Remove Python version\n"
+  printf "  update:        Update specified Python to the latest known Micro version (e.g. updates 3.10.1 to 3.10.2)\n"
+  printf "  update-all:    Update all pymac installs to latest known Micro versions\n"
+  printf "  upgrade:       Update pymac itself to the latest HEAD version\n\n"
+  printf "See 'pymac <command> help' for more information.\n"
+}
+
+pymac_cmd() {
+  local command="$1"
+  local py_version
+
+  while :; do
+    case "$command" in
+      -h|help|--help|"")
+        help
+        break
+        ;;
+      add-certs|default|exec|uninstall|update)
+        shift
+        # If Python version number provided, validate it
+        if [[ $1 =~ ^[0-9][.]* ]]; then
+          if py_valid "$1"; then
+            IFS='.' read -ra PYVERSION <<< "$1"
+            py_version="${PYVERSION[0]}.${PYVERSION[1]}"
+            if ! is_installed "$py_version"; then
+              printf "Python version %s not installed.\n" "$py_version"
+              return 1
+            fi
+            if [[ ${#PYVERSION[@]} -eq 3 ]]; then
+              printf "Calling 'pymac %s %s' instead (ignoring the Micro version you provided)\n" "$command" "$py_version"
+            fi
+          else
+            printf "Please provide a valid Python version number.\n"
+            return 1
+          fi
+          shift
+        fi
+        # If Python version has been set, call command with it
+        if [[ -n "$py_version" ]]; then
+          # shellcheck disable=1090
+          . "$(pymac_dir)"/commands/"$command".bash "$py_version" "$@"
+        else
+          # shellcheck disable=1090
+          . "$(pymac_dir)"/commands/"$command".bash "$@"
+        fi
+        break
+        ;;
+      clear-cache|default-which|install|list|pyenv|update-all|upgrade)
+        shift
+        # shellcheck disable=1090
+        . "$(pymac_dir)"/commands/"$command".bash "$@"
+        break
+        ;;
+      *)
+        printf "Invalid command. See 'pymac help' for usage.\n"
+        break
+    esac
+  done
+}
+
+pymac_cmd "$@"
