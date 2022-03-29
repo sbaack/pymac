@@ -114,8 +114,7 @@ set -x PATH ~/.config/pymac/default/bin "$PATH"
 For fish completions:
 
 ```bash
-mkdir -p ~/.config/fish/completions
-ln -s ~/.pymac/completions/pymac.fish ~/.config/fish/completions/
+mkdir -p ~/.config/fish/completions; and ln -s -f ~/.pymac/completions/pymac.fish ~/.config/fish/completions/
 ```
 
 Adding `~/.config/pymac/default/bin` to your PATH is entirely optional. You can also call `pymac` Python installations directly with the `pymac exec` command.
