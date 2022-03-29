@@ -127,11 +127,6 @@ complete -x -c pymac -n "__fish_seen_subcommand_from pyenv; \
     -a sync \
     -d "Symlink all Python.org installations to \$PYENV_ROOT/versions and remove any dead symlinks"
 
-# 'pymac exec': Offer fish's python completions after Python version number
-complete -x -c pymac -n "__fish_seen_subcommand_from exec; \
-    and __fish_seen_subcommand_from (pymac list)" \
-    -w python
-
 # 'pymac install': Offer optional args after Python version number was provided
 complete -x -c pymac -n "__fish_seen_subcommand_from install; \
     and __fish_seen_subcommand_from (__list-latest-versions)" \
