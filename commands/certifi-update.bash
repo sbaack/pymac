@@ -8,10 +8,10 @@ help() {
   printf "Note: This is executed automatically when you install a Python version\n"
   printf "with pymac. You only need to run it separately if it failed during the\n"
   printf "installtion or if you want to update the certifi package.\n\n"
-  printf "Usage: pymac add-certs <Major.Minor version number>\n"
+  printf "Usage: pymac certifi-update <Major.Minor version number>\n"
 }
 
-add_certs() {
+update_certifi() {
   local py_version="$1"
   local py_dir=/Library/Frameworks/Python.framework/Versions/"$py_version"
   local cert_file="$py_dir"/etc/openssl/cert.pem
@@ -38,7 +38,7 @@ parse_args() {
   while :; do
     case "$1" in
       [0-9][.][0-9]*)
-        add_certs "$1"
+        update_certifi "$1"
         break
         ;;
       -h|help|--help|"")

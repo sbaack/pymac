@@ -160,7 +160,7 @@ install() {
   download_installer "$py_version_long" "$pkg" &&
     call_installer "$py_version_short" "$pkg" &&
       symlink_executables "$py_version_short" &&
-        . "$(pymac_dir)"/commands/add-certs.bash "$py_version_short"
+        . "$(pymac_dir)"/commands/certifi-update.bash "$py_version_short"
   if ! [[ $keep == true ]]; then
     rm "$(pymac_dir)"/cache/"$pkg"
   fi
