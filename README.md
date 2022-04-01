@@ -5,7 +5,7 @@
 Core features:
 
 - Download and install Python.org versions entirely from the command line
-- Installs only the basics (Python itself, Pip, and SSL certificates), not extras like GUI applications
+- Installs only the basics (Python itself, Pip, and SSL certificates), other features like GUI applications are excluded (see [What is excluded](#what-is-excluded))
 - Picks the latest known Python micro versions for you if you don't provide one
 - Integrates with [pyenv](https://github.com/pyenv/pyenv) (allows you to manage Python versions installed with Python.org installers like normal pyenv installs)
 - Various other conveniences to manage Python.org installations (e.g. setting default Python version, uninstalling versions, updating to latest known micro versions)
@@ -134,7 +134,7 @@ In short, because the Python.org installers have some advantages over other solu
 `pymac` is about utilizing the advantages of Python.org installers while mitigating some of their inconveniences:
 
 - The most obvious one being that you usually have to visit Python.org, download the version you need, and click through a GUI interface.
-- Python.org installers by default also install extras that you might not want: GUI applications, shell config manipulations, documentation and more.
+- Python.org installers by default also install features that you might not want: GUI applications, shell config manipulations, documentation and more (see [What is excluded](#what-is-excluded))
 - Python.org installers come with their own private copy of OpenSSL and require you to manually execute a command that installs and sets up SSL root certificates from the [`certifi` package](https://pypi.org/project/certifi/). This command only comes with the GUI applications.
 
 `pymac` mitigates this by a) enabling you to install Python.org versions entirely from the command line, b) customizing the installer to only install the basics: Python itself and Pip, and c) automatically installing and setting up SSL certificates. In addition, it offers commands to help manage multiple versions of Python. See [How it works](#how-it-works) and the [List of commands](#list-of-commands) for more information.
@@ -144,9 +144,18 @@ In short, because the Python.org installers have some advantages over other solu
 When you install a Python version with `pymac` the following happens in the background:
 
 1. Download the correct PKG installer from Python.org.
-2. Install Python using the PKG file from the command line (no GUI). Your root password will be required to install Python in `/Library/Frameworks/Python.framework/Versions/<Major.Minor>` (unfortunately you can't customize the location). `pymac` customizes the installation so that only Python itself and Pip are installed. The following additional features of the Python.org installer are excluded: GUI Applications, UNIX command line toos, Python Documentation, Shell profile updater.
+2. Install Python using the PKG file from the command line (no GUI). Your root password will be required to install Python in `/Library/Frameworks/Python.framework/Versions/<Major.Minor>` (unfortunately you can't customize the location). `pymac` customizes the installation so that only Python itself and Pip are installed (see [What is excluded](#what-is-excluded)).
 3. Additional symlinks are created. Python.org installers only include executables named `python3` or `pip3` by default. `pymac` creates additional symlinks in Python's 'bin' directory so that the default names are used as well (`python`, `pip` etc.).
 4. Finally, `pymac` will automatically install and symlink SSL root certificates from the [`certifi` package](https://pypi.org/project/certifi/). This replicates the `Install Certificates.command` that comes with the GUI applications from the Python.org installer (which `pymac` doesn't install) and that you typically have to execute manually after the installation is completed.
+
+## What is excluded
+
+The following features of the Python.org installer are excluded:
+
+- GUI Applications: Adds a directory in `/Applications` with the Python Launcher (enables double-clicking Python scripts in Finder), some scripts (for setting up SSL certificates and the shell profile updater) and a shortcut to IDLE. Note that you can still run IDLE from the command line when GUI applications are not installed.
+- UNIX command line tools: Adds symlinks to Python executables to `/usr/local/bin`.
+- Python Documentation: Offline documentation.
+- Shell profile updater: Adds a line to your shell config (`.bash_profile`, `.zprofile`, or `config.fish`) that prepends the installed Python version to your PATH.
 
 ## List of commands
 
