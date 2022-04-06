@@ -30,6 +30,9 @@ If you want to call a specific version of Python that is not set as default:
 ```bash
 > pymac exec 3.10 --version
 Python 3.10.4
+> # If you have ~/.local/bin in your PATH you can also use:
+> python3.10 --version
+Python 3.10.4
 ```
 
 Want to update to the latest known micro versions?
@@ -103,6 +106,8 @@ Add the following to your `~/.zshrc` or `~/.bashrc`:
 export PATH=~/.pymac/bin:"$PATH"
 # Optional: Add pymac default to your PATH
 export PATH=~/.config/pymac/default/bin:"$PATH"
+# Optional: Add ~/.local/bin to your PATH if you haven't already
+export PATH=~/.local/bin:"$PATH"
 ```
 
 For fish, add this to your `~/.config/fish/config.fish`:
@@ -111,6 +116,8 @@ For fish, add this to your `~/.config/fish/config.fish`:
 set -x PATH ~/.pymac/bin "$PATH"
 # Optional: Add pymac default to your PATH
 set -x PATH ~/.config/pymac/default/bin "$PATH"
+# Optional: Add ~/.local/bin to your PATH if you haven't already
+set -x PATH ~/.local/bin "$PATH"
 ```
 
 For fish completions:
@@ -119,7 +126,7 @@ For fish completions:
 mkdir -p ~/.config/fish/completions; and ln -s -f ~/.pymac/completions/pymac.fish ~/.config/fish/completions/
 ```
 
-Adding `~/.config/pymac/default/bin` to your PATH is entirely optional. You can also call `pymac` Python installations directly with the `pymac exec` command.
+Adding `~/.config/pymac/default/bin` to your PATH is entirely optional. You can also call `pymac` Python installations directly with the `pymac exec` command. If you would like to be able to call or specify a Python version with `pythonMajor.Minor` (e.g. `python3.10`), make sure to add `~/.local/bin` to your PATH. Also ensure that `~/.local/bin` is in your PATH before `/usr/local/bin` because this is where Homebrew stores `pythonMajor.Minor` symlinks itself. Having `~/.local/bin` in your PATH before `/usr/local/bin` means that `pymac`'s Python versions are preferred over Homebrew if you have a Python version installed in both.
 
 Note: If you want to manage `pymac` installs with `pyenv` you should source `pyenv` _after_ adding `~/.config/pymac/default/bin` to your PATH.
 
@@ -145,7 +152,7 @@ When you install a Python version with `pymac` the following happens in the back
 
 1. Download the correct PKG installer from Python.org.
 2. Install Python using the PKG file from the command line (no GUI). Your root password will be required to install Python in `/Library/Frameworks/Python.framework/Versions/<Major.Minor>` (unfortunately you can't customize the location). `pymac` customizes the installation so that only Python itself and Pip are installed (see [What is excluded](#what-is-excluded)).
-3. Additional symlinks are created. Python.org installers only include executables named `python3` or `pip3` by default. `pymac` creates additional symlinks in Python's 'bin' directory so that the default names are used as well (`python`, `pip` etc.).
+3. Additional symlinks are created. First, Python.org installers only include executables named `python3` or `pip3` by default. `pymac` creates additional symlinks in Python's 'bin' directory so that the default names are used as well (`python`, `pip` etc.). Second, the Python.org installers optionally create `pythonMajor.Minor` symlinks (e.g. `python3.10`) in `/usr/local/bin` to make calling or specifying a Python version easier (if 'UNIX command line tools' are installed, they are excluded by `pymac`. See [What is excluded](#what-is-excluded)). Putting such symlinks in `/usr/local/bin` might conflict with Homebrew Python. `pymac` avoids conflicts by creating `pythonMajor.Minor` symlinks in `~/.local/bin` instead.
 4. Finally, `pymac` will automatically install and symlink SSL root certificates from the [`certifi` package](https://pypi.org/project/certifi/). This replicates the `Install Certificates.command` that comes with the GUI applications from the Python.org installer (which `pymac` doesn't install) and that you typically have to execute manually after the installation is completed.
 
 ## What is excluded

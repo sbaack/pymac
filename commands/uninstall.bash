@@ -6,11 +6,17 @@ help() {
 }
 
 uninstall() {
-  # Delete directory in /Library/Frameworks/Python.framework/Version
   local py_version="$1"
   local py_dir=/Library/Frameworks/Python.framework/Versions/"$py_version"
 
-  sudo rm -rf "$py_dir" || printf "Failed to delete Python version %s.\n" "$py_version" && return 1
+  # Delete directory in /Library/Frameworks/Python.framework/Version
+  if sudo rm -rf "$py_dir"; then
+    # Remove symlink in ~/.local/bin
+    rm -f ~/.local/bin/python"$py_version"
+  else
+    printf "Failed to delete Python version %s.\n" "$py_version"
+    return 1
+  fi
 }
 
 parse_args() {
