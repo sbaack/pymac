@@ -167,11 +167,9 @@ install() {
         return 1
       fi
     fi
-  fi
-
   # If MAJOR.MINOR.MICRO provided for a known outdated version, check if the provided Micro version is larger
   # then the last release with a Mac installer and warn user if yes
-  if [[ -n $py_version_long && -n $latest_known_file ]]; then
+  elif [[ -n $py_version_long && -n $latest_known_file ]]; then
     outdated=${latest_known_file[1]}
     local latest_available_micro
     latest_available_micro=$(printf "%s" "${latest_known_file[0]}" | cut -d'.' -f 3)
