@@ -116,6 +116,7 @@ symlink_executables() {
 install() {
   local py_version="$1"
   local keep="$2"
+  local pkg
   local py_version_short
   local py_version_long
   local latest_known_file
@@ -167,16 +168,14 @@ install() {
         return 1
       fi
     fi
-  # If MAJOR.MINOR.MICRO provided for a known outdated version, check if the provided Micro version is larger
-  # then the last release with a Mac installer and warn user if yes
+  # If MAJOR.MINOR.MICRO provided for a Python version that is known to have releases without Mac installers,
+  # check if the provided Micro version is bigger then the last release with a Mac installer and warn user if yes
   elif [[ -n $py_version_long && -n $latest_known_file ]]; then
     outdated=${latest_known_file[1]}
-    local latest_available_micro
-    latest_available_micro=$(printf "%s" "${latest_known_file[0]}" | cut -d'.' -f 3)
-    local provided_micro="${PYVERSION[2]}"
-    # If latest available Mac installer is known to be outdated and if the
-    # provided Micro version is larger, inform user
     if [[ -n $outdated ]]; then
+      local latest_available_micro
+      latest_available_micro=$(printf "%s" "${latest_known_file[0]}" | cut -d'.' -f 3)
+      local provided_micro="${PYVERSION[2]}"
       if [[ $provided_micro -gt $latest_available_micro ]]; then
         printf "The last %s version published with a Mac installer is %s.\n" "$py_version_short" "${latest_known_file[0]}"
         printf "More recent security updates are only available as source code.\n"
