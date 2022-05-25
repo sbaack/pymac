@@ -164,6 +164,14 @@ The following features of the Python.org installer are excluded:
 - Python Documentation: Offline documentation.
 - Shell profile updater: Adds a line to your shell config (`.bash_profile`, `.zprofile`, or `config.fish`) that prepends the installed Python version to your PATH.
 
+If you need any of these features, `pymac` can still be useful for you. First, you can use it to download the installer using the `--keep` flag:
+
+```bash
+pymac install 3.10 --keep
+```
+
+After the download is completed, you can cancel `pymac`'s install process and manually open the GUI installer stored in `~/.pymac/cache` instead (you have to manually remove the installer afterwards if you don't want to keep it). Once installed, `pymac` can still be used to manage your Python installation(s), e.g. to install or update SSL certificates or to uninstall a Python version.
+
 ## List of commands
 
 ```
