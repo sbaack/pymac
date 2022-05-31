@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 help() {
-  printf "Delete downlaoded PKG installers.\n\n"
+  printf "Delete downloaded PKG installers.\n\n"
   printf "Note: PKG installers are deleted by default after install is\n"
   printf "completed successefully. You only need to clear the cache manually\n"
   printf "if an install failed, was interruped, or if you used the '--keep'\n"
