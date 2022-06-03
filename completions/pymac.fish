@@ -47,6 +47,9 @@ complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a default-which \
     -d "Show Python version symlinked to ~/.config/pymac/default"
+complete -x -c pymac -n "__fish_seen_subcommand_from default-which" \
+    -a --bare \
+    -d "Only show version number of current default instead of full path"
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a exec \
     -d "Directly call specified Python version"
