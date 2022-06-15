@@ -21,7 +21,7 @@ update_certifi() {
   # is configured to only allow installing packages in virtualenvs
   if PIP_REQUIRE_VIRTUALENV=false \
     "$py_dir"/bin/python3 -E -m   \
-    pip install --upgrade pip setuptools certifi; then
+    pip install --upgrade pip certifi; then
     # Remove old cert file if it exists
     rm -f "$cert_file"
     # Symlink certifi's cacert.pem to $cert_file
