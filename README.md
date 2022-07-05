@@ -25,6 +25,8 @@ If you only provide Major.Minor versions, `pymac` will pick the latest known mic
 pymac default 3.9
 ```
 
+Please note that if you don't set a default, `pymac` only provides symlinks in `~/.local/bin` named "`pythonMajor.Minor`" (e.g. `python3.10`, see install below), no `python/pip` or `python3/pip3` commands are added to your PATH.
+
 If you want to call a specific version of Python that is not set as default:
 
 ```bash
@@ -70,7 +72,8 @@ pymac pyenv sync
 This creates symlinks to `pymac` installs in `$PYENV_ROOT/versions`, which allows you to manage them with `pyenv`'s shims. `pymac` names its versions as Major.Minor to distinguish them from `pyenv` installs, which are named as Major.Minor.Micro:
 
 ```bash
-# In this example we added pymac symlinks for 3.10 and 3.9. 3.10.3 is a pyenv install
+# In this example we added pymac symlinks for 3.10 and 3.9
+# Version 3.10.3 is a pyenv install
 > pyenv versions
 * system (set by /Users/stefan/.pyenv/version)
   3.10
@@ -87,6 +90,7 @@ This creates symlinks to `pymac` installs in `$PYENV_ROOT/versions`, which allow
 To remove symlinks to pyenv:
 
 ```bash
+# Remove a specific version or all
 pymac pyenv remove 3.9
 pymac pyenv remove-all
 ```
@@ -170,7 +174,7 @@ If you need any of these features, `pymac` can still be useful for you. First, y
 pymac install 3.10 --keep
 ```
 
-After the download is completed, you can cancel `pymac`'s install process and manually open the GUI installer stored in `~/.pymac/cache` instead. Once installed, `pymac` can still be used to manage your Python installation(s), e.g. to install or update SSL certificates or to uninstall a Python version. Also note that you can remove the downloaded PKG installer(s) with `pymac clear-cache`.
+After the download is completed, you can cancel `pymac`'s install process when you're asked for you root password and manually open the GUI installer stored in `~/.pymac/cache` instead. Once installed, `pymac` can still be used to manage your Python installation(s), e.g. to install or update SSL certificates or to uninstall a Python version. Also note that you can remove the downloaded PKG installer(s) with `pymac clear-cache`.
 
 ## List of commands
 
