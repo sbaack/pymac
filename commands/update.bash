@@ -14,7 +14,7 @@ update() {
   local latest_available=${latest[0]}
 
   if [[ $installed_py_version == "$latest_available" ]]; then
-    printf "Version %s is already at the latest known version (%s).\n" "$py_version" "$installed_py_version"
+    printf "Version %s is already at the latest known version available with a Mac installer (%s).\n" "$py_version" "$installed_py_version"
   else
     printf "Updating %s to %s...\n" "$installed_py_version" "$latest_available"
     . "$(pymac_dir)"/commands/install.bash "$py_version"
