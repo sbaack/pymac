@@ -108,8 +108,9 @@ symlink_executables() {
     fi
   done
 
-  # Next, create a pythonX.X(X) symlink in ~/.local/bin to make calling or specifying
-  # installed Python version easier
+  # Next, make sure ~/.local/bin exists and create a pythonX.X(X) symlink in it
+  # to make calling or specifying installed Python version easier
+  mkdir -p ~/.local/bin
   ln -s -f "$py_bin_dir"/python"$py_version_short" ~/.local/bin/python"$py_version_short"
 }
 
