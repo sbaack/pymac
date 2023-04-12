@@ -3,7 +3,7 @@
 help() {
   printf "Manage symlinks of pymac installs in \$PYENV_ROOT/versions.\n\n"
   printf "Creating these symlinks allows you to manage your pymac installs with\n"
-  printf "pyenv (e.g. setting them via pyenv global/local/shell). Note that pyamc\n"
+  printf "pyenv (e.g. setting them via pyenv global/local/shell). Note that pymac\n"
   printf "names symlinks as Major.Minor (e.g. 3.10) to distinguish them from pyenv\n"
   printf "installs, which are named as Major.Minor.Micro (e.g. 3.10.3).\n\n"
   printf "Usage: pymac pyenv <add>/<remove>/<remove-all>/<sync>\n\n"

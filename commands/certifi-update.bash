@@ -7,7 +7,7 @@ help() {
   printf "Python.org installers include their own private copy of OpenSSL.\n\n"
   printf "Note: This is executed automatically when you install a Python version\n"
   printf "with pymac. You only need to run it separately if it failed during the\n"
-  printf "installtion or if you want to update the certifi package.\n\n"
+  printf "installation or if you want to update the certifi package.\n\n"
   printf "Usage: pymac certifi-update <Major.Minor version number>\n"
 }
 
