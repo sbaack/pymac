@@ -174,7 +174,7 @@ If you need any of these features, `pymac` can still be useful for you. First, y
 pymac install 3.10 --keep
 ```
 
-After the download is completed, you can cancel `pymac`'s install process when you're asked for you root password and manually open the GUI installer stored in `~/.pymac/cache` instead. Once installed, `pymac` can still be used to manage your Python installation(s), e.g. to install or update SSL certificates or to uninstall a Python version. Also note that you can remove the downloaded PKG installer(s) with `pymac clear-cache`.
+After the download is completed, you can cancel `pymac`'s install process when you're asked for your root password and manually open the GUI installer stored in `~/.pymac/cache` instead. Once installed, `pymac` can still be used to manage your Python installation(s), e.g. to install or update SSL certificates or to uninstall a Python version. You can remove the downloaded PKG installer(s) with `pymac clear-cache`.
 
 ## List of commands
 
