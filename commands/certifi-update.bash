@@ -20,7 +20,7 @@ update_certifi() {
   # Set PIP_REQUIRE_VIRTUALENV to false to make sure this works if pip
   # is configured to only allow installing packages in virtualenvs
   if PIP_REQUIRE_VIRTUALENV=false \
-    "$py_dir"/bin/python3 -E -m   \
+    "$py_dir"/bin/python3 -E -m \
     pip install --upgrade pip certifi; then
     # Remove old cert file if it exists
     rm -f "$cert_file"
@@ -37,17 +37,18 @@ update_certifi() {
 parse_args() {
   while :; do
     case "$1" in
-      [0-9][.][0-9]*)
-        update_certifi "$1"
-        break
-        ;;
-      -h|help|--help|"")
-        help
-        break
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac add-certs help' for usage.\n"
-        break
+    [0-9][.][0-9]*)
+      update_certifi "$1"
+      break
+      ;;
+    -h | help | --help | "")
+      help
+      break
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac add-certs help' for usage.\n"
+      break
+      ;;
     esac
   done
 }

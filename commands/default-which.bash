@@ -28,23 +28,24 @@ parse_args() {
   local bare=false
   while :; do
     case "$1" in
-      "")
-        break
-        ;;
-      --bare)
-        bare=true
-        break
-        ;;
-      -h|help|--help)
-        help
-        return 0
-        ;;
-      *)
-        printf "Invalid option. See 'pymac default help' for usage.\n"
-        exit 1
+    "")
+      break
+      ;;
+    --bare)
+      bare=true
+      break
+      ;;
+    -h | help | --help)
+      help
+      return 0
+      ;;
+    *)
+      printf "Invalid option. See 'pymac default help' for usage.\n"
+      exit 1
+      ;;
     esac
   done
- default-which "$bare" 
+  default-which "$bare"
 }
 
 parse_args "$@"

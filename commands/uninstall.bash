@@ -22,17 +22,18 @@ uninstall() {
 parse_args() {
   while :; do
     case "$1" in
-      [0-9][.][0-9]*)
-        uninstall "$1"
-        break
-        ;;
-      -h|help|--help|"")
-        help
-        break
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac uninstall help' for usage.\n"
-        break
+    [0-9][.][0-9]*)
+      uninstall "$1"
+      break
+      ;;
+    -h | help | --help | "")
+      help
+      break
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac uninstall help' for usage.\n"
+      break
+      ;;
     esac
   done
 }

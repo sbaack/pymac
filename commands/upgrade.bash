@@ -17,17 +17,18 @@ upgrade() {
 parse_args() {
   while :; do
     case "$1" in
-      "")
-        upgrade
-        break
-        ;;
-      -h|help|--help)
-        help
-        break
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac upgrade help' for usage.\n"
-        break
+    "")
+      upgrade
+      break
+      ;;
+    -h | help | --help)
+      help
+      break
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac upgrade help' for usage.\n"
+      break
+      ;;
     esac
   done
 }

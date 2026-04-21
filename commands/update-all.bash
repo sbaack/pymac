@@ -21,17 +21,18 @@ update-all() {
 parse_args() {
   while :; do
     case "$1" in
-      "")
-        update-all
-        break
-        ;;
-      -h|help|--help)
-        help
-        break
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac update help' for usage.\n"
-        break
+    "")
+      update-all
+      break
+      ;;
+    -h | help | --help)
+      help
+      break
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac update help' for usage.\n"
+      break
+      ;;
     esac
   done
 }

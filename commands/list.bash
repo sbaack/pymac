@@ -30,21 +30,22 @@ list_py_installs() {
 parse_args() {
   while :; do
     case "$1" in
-      "")
-        list_py_installs
-        break
-        ;;
-      -h|help|--help)
-        help
-        break
-        ;;
-      -f|--full)
-        list_py_installs "verbose"
-        break
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac list help' for usage.\n"
-        break
+    "")
+      list_py_installs
+      break
+      ;;
+    -h | help | --help)
+      help
+      break
+      ;;
+    -f | --full)
+      list_py_installs "verbose"
+      break
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac list help' for usage.\n"
+      break
+      ;;
     esac
   done
 }

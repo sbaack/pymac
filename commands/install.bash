@@ -33,7 +33,7 @@ download_installer() {
   # Only attempt to download if the file doesn't exist
   if [[ ! -e $cache_dir/$pkg ]]; then
     # Check if URL is available
-    status_code=$(curl  -o /dev/null --silent -Iw '%{http_code}' "$url")
+    status_code=$(curl -o /dev/null --silent -Iw '%{http_code}' "$url")
     if [[ $status_code == "200" ]]; then
       curl -O -L --output-dir "$cache_dir" "$url"
     else
@@ -71,7 +71,7 @@ generate_choices_xml() {
   # Use pattern replacement to insert Python version numbers
   choices=${choices//##-PyVersion-##/$py_version}
   # Save new XML choice file
-  printf "%s" "$choices" > "$(pymac_dir)"/choices_xml/choices_"$py_version".xml
+  printf "%s" "$choices" >"$(pymac_dir)"/choices_xml/choices_"$py_version".xml
 }
 
 call_installer() {
@@ -127,7 +127,7 @@ install() {
   # ${PYVERSION[0]} = MAJOR (3)
   # ${PYVERSION[1]} = MINOR (10)
   # ${PYVERSION[2]} = MICRO (3)
-  IFS='.' read -ra PYVERSION <<< "$py_version"
+  IFS='.' read -ra PYVERSION <<<"$py_version"
   if [[ ${PYVERSION[0]} -lt 3 || "${PYVERSION[1]}" -lt 6 ]]; then
     printf "Minimum supported version is Python 3.6.\n"
     exit 1
@@ -145,7 +145,7 @@ install() {
 
   # If there is a latest known version for the provided MAJOR.MINOR version, save its contents in an array
   if [[ -f $(pymac_dir)/latest_versions/$py_version_short ]]; then
-    IFS=$'\n' read -d '' -r -a latest_known_file < "$(pymac_dir)/latest_versions/$py_version_short"
+    IFS=$'\n' read -d '' -r -a latest_known_file <"$(pymac_dir)/latest_versions/$py_version_short"
   fi
 
   # If MAJOR.MINOR provided that has no known latest version, exit with error
@@ -202,8 +202,8 @@ install() {
 
   download_installer "$py_version_long" "$pkg" &&
     call_installer "$py_version_short" "$pkg" &&
-      symlink_executables "$py_version_short" &&
-        . "$(pymac_dir)"/commands/certifi-update.bash "$py_version_short"
+    symlink_executables "$py_version_short" &&
+    . "$(pymac_dir)"/commands/certifi-update.bash "$py_version_short"
   if ! [[ $keep == true ]]; then
     rm "$(pymac_dir)"/cache/"$pkg"
   fi
@@ -219,43 +219,44 @@ parse_args() {
   local arg_count="$#"
   while :; do
     case "$1" in
-      [0-9].[0-9]*)
-        if py_valid "$1"; then
-          py_version="$1"
-          shift
-        else
-          printf "Please provide a valid Python version number.\n"
-          return 1
-        fi
-        ;;
-      -h|help|--help)
+    [0-9].[0-9]*)
+      if py_valid "$1"; then
+        py_version="$1"
+        shift
+      else
+        printf "Please provide a valid Python version number.\n"
+        return 1
+      fi
+      ;;
+    -h | help | --help)
+      help
+      break
+      ;;
+    -d | --default)
+      default=true
+      shift
+      ;;
+    -k | --keep)
+      keep=true
+      shift
+      ;;
+    "")
+      # If any args have been provided, do nothing, else print help
+      if [[ $arg_count -gt 0 ]]; then
+        break
+      else
         help
         break
-        ;;
-      -d|--default)
-        default=true
-        shift
-        ;;
-      -k|--keep)
-        keep=true
-        shift
-        ;;
-      "")
-        # If any args have been provided, do nothing, else print help
-        if [[ $arg_count -gt 0 ]]; then
-          break
-        else
-          help
-          break
-        fi
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac install help' for usage.\n"
-        return 1
+      fi
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac install help' for usage.\n"
+      return 1
+      ;;
     esac
   done
 
-  if [[ ( -z "$py_version" && $default == true ) || ( -z "$py_version" && $keep == true ) ]]; then
+  if [[ (-z "$py_version" && $default == true) || (-z "$py_version" && $keep == true) ]]; then
     printf "Please provide a valid Python version number.\n"
     return 1
   fi

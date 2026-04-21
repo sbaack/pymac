@@ -19,17 +19,18 @@ exec_py() {
 parse_args() {
   while :; do
     case "$1" in
-      [0-9][.][0-9]*)
-        exec_py "$@"
-        break
-        ;;
-      -h|help|--help|"")
-        help
-        break
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac update help' for usage.\n"
-        break
+    [0-9][.][0-9]*)
+      exec_py "$@"
+      break
+      ;;
+    -h | help | --help | "")
+      help
+      break
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac update help' for usage.\n"
+      break
+      ;;
     esac
   done
 }

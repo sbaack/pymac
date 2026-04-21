@@ -19,17 +19,18 @@ set-default() {
 parse_args() {
   while :; do
     case "$1" in
-      [0-9][.][0-9]*)
-        set-default "$1"
-        break
-        ;;
-      -h|help|--help|"")
-        help
-        break
-        ;;
-      *)
-        printf "Invalid option. See 'pymac default help' for usage.\n"
-        exit 1
+    [0-9][.][0-9]*)
+      set-default "$1"
+      break
+      ;;
+    -h | help | --help | "")
+      help
+      break
+      ;;
+    *)
+      printf "Invalid option. See 'pymac default help' for usage.\n"
+      exit 1
+      ;;
     esac
   done
 }

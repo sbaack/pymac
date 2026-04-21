@@ -81,60 +81,61 @@ parse_args() {
   fi
   while :; do
     case "$1" in
-      -h|help|--help|"")
-        help
-        break
-        ;;
-      add)
-        if [[ -n "$pyenv_versions_dir" ]]; then
-          if [[ -n "$2" ]] && py_valid "$2"; then
-            IFS='.' read -ra PYVERSION <<< "$2"
-            local py_version="${PYVERSION[0]}.${PYVERSION[1]}"
-            if is_installed "$py_version"; then
-              if [[ ${#PYVERSION[@]} -eq 3 ]]; then
-                printf "Calling 'pymac pyenv add %s' instead (ignoring the Micro version you provided)\n" "$py_version"
-              fi
-              pyenv-add "$pyenv_versions_dir" "$py_version"
-              break
-            else
-              printf "Python version %s not installed\n" "$py_version"
-              return 1
+    -h | help | --help | "")
+      help
+      break
+      ;;
+    add)
+      if [[ -n "$pyenv_versions_dir" ]]; then
+        if [[ -n "$2" ]] && py_valid "$2"; then
+          IFS='.' read -ra PYVERSION <<<"$2"
+          local py_version="${PYVERSION[0]}.${PYVERSION[1]}"
+          if is_installed "$py_version"; then
+            if [[ ${#PYVERSION[@]} -eq 3 ]]; then
+              printf "Calling 'pymac pyenv add %s' instead (ignoring the Micro version you provided)\n" "$py_version"
             fi
+            pyenv-add "$pyenv_versions_dir" "$py_version"
+            break
           else
-            printf "Please provide a valid Python version number.\n"
+            printf "Python version %s not installed\n" "$py_version"
             return 1
           fi
-        else
-          printf "pyenv not installed.\n"
-          return 1
-        fi
-        ;;
-      remove)
-        if [[ -n "$2" ]] && py_valid "$2"; then
-          IFS='.' read -ra PYVERSION <<< "$2"
-          local py_version="${PYVERSION[0]}.${PYVERSION[1]}"
-          if [[ ${#PYVERSION[@]} -eq 3 ]]; then
-            printf "Calling 'pymac pyenv remove %s' instead (ignoring the Micro version you provided)\n" "$py_version"
-          fi
-          pyenv-remove "$pyenv_versions_dir" "$py_version"
-          break
         else
           printf "Please provide a valid Python version number.\n"
           return 1
         fi
-        ;;
-      remove-all|sync)
-        if [[ -n "$pyenv_versions_dir" ]]; then
-          pyenv-"$1" "$pyenv_versions_dir"
-          break
-        else
-          printf "pyenv not installed.\n"
-          return 1
+      else
+        printf "pyenv not installed.\n"
+        return 1
+      fi
+      ;;
+    remove)
+      if [[ -n "$2" ]] && py_valid "$2"; then
+        IFS='.' read -ra PYVERSION <<<"$2"
+        local py_version="${PYVERSION[0]}.${PYVERSION[1]}"
+        if [[ ${#PYVERSION[@]} -eq 3 ]]; then
+          printf "Calling 'pymac pyenv remove %s' instead (ignoring the Micro version you provided)\n" "$py_version"
         fi
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac pyenv help' for usage.\n"
+        pyenv-remove "$pyenv_versions_dir" "$py_version"
         break
+      else
+        printf "Please provide a valid Python version number.\n"
+        return 1
+      fi
+      ;;
+    remove-all | sync)
+      if [[ -n "$pyenv_versions_dir" ]]; then
+        pyenv-"$1" "$pyenv_versions_dir"
+        break
+      else
+        printf "pyenv not installed.\n"
+        return 1
+      fi
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac pyenv help' for usage.\n"
+      break
+      ;;
     esac
   done
 }

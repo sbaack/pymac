@@ -16,17 +16,18 @@ clear-cache() {
 parse-args() {
   while :; do
     case "$1" in
-      "")
-        clear-cache
-        break
-        ;;
-      help|--help|-h)
-        help
-        break
-        ;;
-      *)
-        printf "Invalid command. Check 'pymac clear-cache help' for usage.\n"
-        break
+    "")
+      clear-cache
+      break
+      ;;
+    help | --help | -h)
+      help
+      break
+      ;;
+    *)
+      printf "Invalid command. Check 'pymac clear-cache help' for usage.\n"
+      break
+      ;;
     esac
   done
 }
