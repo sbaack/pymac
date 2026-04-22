@@ -10,14 +10,17 @@ update() {
   local py_exec=/Library/Frameworks/Python.framework/Versions/"$py_version"/bin/python3
   local installed_py_version
   installed_py_version=$("$py_exec" --version | cut -d ' ' -f 2)
-  IFS=$'\n' read -d '' -r -a latest <"$(pymac_dir)/latest_versions/$py_version"
-  local latest_available=${latest[0]}
+
+  if ! get_latest_pkg_version "$py_version"; then
+    return 1
+  fi
+  local latest_available=${LATEST_PKG_INFO[0]}
 
   if [[ $installed_py_version == "$latest_available" ]]; then
-    printf "Version %s is already at the latest known version available with a Mac installer (%s).\n" "$py_version" "$installed_py_version"
+    printf "Version %s is already at the latest version available with a Mac installer (%s).\n" "$py_version" "$installed_py_version"
   else
     printf "Updating %s to %s...\n" "$installed_py_version" "$latest_available"
-    . "$(pymac_dir)"/commands/install.bash "$py_version"
+    . "$(pymac_dir)"/commands/install.bash "$latest_available"
   fi
 }
 

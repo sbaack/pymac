@@ -120,10 +120,8 @@ install() {
   local pkg
   local py_version_short
   local py_version_long
-  local latest_known_file
-  local outdated
 
-  # Split $py_version into an array structed as follows (using version 3.10.3 as an example):
+  # Split $py_version into an array structured as follows (using version 3.10.3 as an example):
   # ${PYVERSION[0]} = MAJOR (3)
   # ${PYVERSION[1]} = MINOR (10)
   # ${PYVERSION[2]} = MICRO (3)
@@ -133,60 +131,26 @@ install() {
     exit 1
   fi
 
-  # If MAJOR.MINOR.MICRO provided (e.g. 3.10.2), derive $py_version_short from it
+  # If MAJOR.MINOR.MICRO provided (e.g. 3.10.2), use it directly
   if [[ ${#PYVERSION[@]} -eq 3 ]]; then
     py_version_long="$py_version"
     py_version_short="${PYVERSION[0]}.${PYVERSION[1]}"
   else
-    # If MAJOR.MINOR provided, save it as $py_version_short and try to get MICRO
-    # from file below
+    # If MAJOR.MINOR provided, query python.org for the latest version
+    # that has a Mac PKG installer
     py_version_short="$py_version"
-  fi
-
-  # If there is a latest known version for the provided MAJOR.MINOR version, save its contents in an array
-  if [[ -f $(pymac_dir)/latest_versions/$py_version_short ]]; then
-    IFS=$'\n' read -d '' -r -a latest_known_file <"$(pymac_dir)/latest_versions/$py_version_short"
-  fi
-
-  # If MAJOR.MINOR provided that has no known latest version, exit with error
-  if [[ -z $py_version_long && -z $latest_known_file ]]; then
-    printf "Couldn't find a latest micro version for %s.\n" "$py_version"
-    printf "Try providing the full version number (e.g. 3.11.0 instead of 3.11).\n"
-    return 1
-  fi
-
-  # If MAJOR.MINOR provided with known latest version, get latest MICRO version number
-  # from file in 'latest_versions' subdirectory. Warn user if that latest version is outdated
-  if [[ -z $py_version_long && -n $latest_known_file ]]; then
-    py_version_long=${latest_known_file[0]}
-    outdated=${latest_known_file[1]}
+    if ! get_latest_pkg_version "$py_version_short"; then
+      return 1
+    fi
+    py_version_long=${LATEST_PKG_INFO[0]}
+    local outdated=${LATEST_PKG_INFO[1]}
     if [[ -n $outdated ]]; then
-      printf "You're about install an outdated version of Python %s (%s)\n" "$py_version_short" "$py_version_long"
+      printf "You're about to install an outdated version of Python %s (%s)\n" "$py_version_short" "$py_version_long"
       printf "The latest security updates for %s are only available as source code.\n" "$py_version_short"
       printf "You can install them with other tools like pyenv or asdf-python.\n"
       read -r -p "Continue anyway? [y/n] " input
       if ! [[ $input =~ ^(yes|y|Y|Yes|YES)$ ]]; then
         return 1
-      fi
-    fi
-  # If MAJOR.MINOR.MICRO provided for a Python version that is known to have releases without Mac installers,
-  # check if the provided Micro version is bigger then the last release with a Mac installer and warn user if yes
-  elif [[ -n $py_version_long && -n $latest_known_file ]]; then
-    outdated=${latest_known_file[1]}
-    if [[ -n $outdated ]]; then
-      local latest_available_micro
-      latest_available_micro=$(printf "%s" "${latest_known_file[0]}" | cut -d'.' -f 3)
-      local provided_micro="${PYVERSION[2]}"
-      if [[ $provided_micro -gt $latest_available_micro ]]; then
-        printf "The last %s version published with a Mac installer is %s.\n" "$py_version_short" "${latest_known_file[0]}"
-        printf "More recent security updates are only available as source code.\n"
-        printf "You can install them with other tools like pyenv or asdf-python.\n"
-        read -r -p "Want to install version ${latest_known_file[0]} instead anyway? [y/n] " input
-        if [[ $input =~ ^(yes|y|Y|Yes|YES)$ ]]; then
-          py_version_long="${latest_known_file[0]}"
-        else
-          return 1
-        fi
       fi
     fi
   fi

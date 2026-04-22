@@ -1,18 +1,3 @@
-function __list-latest-versions
-    # For 'pymac install': Autocomplete Major.Minor versions listed in $PYMAC_ROOT/latest_versions
-    set -l pymac_dir
-    if test -n "$PYMAC_ROOT"
-        set pymac_dir $PYMAC_ROOT
-    else
-        set pymac_dir ~/.pymac
-    end
-    set -l py_versions $pymac_dir/latest_versions/*
-
-    for py_version in $py_versions
-        printf "%s\n" (basename $py_version)
-    end
-end
-
 function __list-pyenv-symlinks
     # For 'pymac pyenv remove': Autocomplete pymac symlinks in $PYENV_ROOT/versions
     if not type -q pyenv
@@ -97,10 +82,6 @@ complete -x -c pymac -n "__fish_seen_subcommand_from update; \
 complete -x -c pymac -n "__fish_seen_subcommand_from list" \
     -a --full \
     -d "Also show full version number (with micro version)"
-complete -x -c pymac -n "__fish_seen_subcommand_from install; \
-    and not __fish_seen_subcommand_from (__list-latest-versions)" \
-    -a "(__list-latest-versions)"
-
 # 'pymac pyenv' command: Add extra completions for 'pymac pyenv add' and 'pymac pyenv remove'
 set -l pyenv_add_remove add remove
 
@@ -130,12 +111,10 @@ complete -x -c pymac -n "__fish_seen_subcommand_from pyenv; \
     -a sync \
     -d "Symlink all Python.org installations to \$PYENV_ROOT/versions and remove any dead symlinks"
 
-# 'pymac install': Offer optional args after Python version number was provided
-complete -x -c pymac -n "__fish_seen_subcommand_from install; \
-    and __fish_seen_subcommand_from (__list-latest-versions)" \
+# 'pymac install': Offer optional args
+complete -x -c pymac -n "__fish_seen_subcommand_from install" \
     -a --default \
     -d "Symlink Python version to ~/.config/pymac/default after install"
-complete -x -c pymac -n "__fish_seen_subcommand_from install; \
-    and __fish_seen_subcommand_from (__list-latest-versions)" \
+complete -x -c pymac -n "__fish_seen_subcommand_from install" \
     -a --keep \
     -d "Do not delete PKG file after install completed, keep it in \$PYMAC_ROOT/cache"

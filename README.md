@@ -6,9 +6,9 @@ Core features:
 
 - Download and install Python.org versions entirely from the command line
 - Installs only the basics (Python itself, Pip, and SSL certificates), other features like GUI applications are excluded (see [What is excluded](#what-is-excluded))
-- Picks the latest known Python micro versions for you if you don't provide one
+- Automatically picks latest known Python micro versions for you if you don't provide one
 - Integrates with [pyenv](https://github.com/pyenv/pyenv) (allows you to manage Python versions installed with Python.org installers like normal pyenv installs)
-- Various other conveniences to manage Python.org installations (e.g. setting default Python version, uninstalling versions, updating to latest known micro versions)
+- Various other conveniences to manage Python.org installations (e.g. setting default Python version, uninstalling versions, updating installed Python versions)
 
 ## Usage
 
@@ -19,7 +19,7 @@ pymac install 3.10 --default
 pymac install 3.9.12
 ```
 
-If you only provide Major.Minor versions, `pymac` will pick the latest known micro version for you. If you specify a micro version, this version will be picked instead. Python.org installers will install Python versions at `/Library/Frameworks/Python.framework/Versions/`, so your root password is required. Using the `--default` flag creates a symlink to `~/.config/pymac/default`, which you can add to your PATH so that the `python` or `pip` commands call this version of Python (see [Installation](#installation)). You can change the default any time:
+If you only provide Major.Minor versions, `pymac` will pick the latest micro version with a Mac installer on https://www.python.org/ftp/python/. If you specify a micro version, this version will be picked instead. Python.org installers will install Python versions at `/Library/Frameworks/Python.framework/Versions/`, so your root password is required. Using the `--default` flag creates a symlink to `~/.config/pymac/default`, which you can add to your PATH so that the `python` or `pip` commands call this version of Python (see [Installation](#installation)). You can change the default any time:
 
 ```bash
 pymac default 3.9
@@ -40,15 +40,12 @@ Python 3.10.4
 Want to update to the latest known micro versions?
 
 ```bash
-# Upgrade pymac itself first to make sure its internal list of latest known versions
-# is up to date
-pymac upgrade
 pymac update 3.10
 # Or check updates for all
 pymac update-all
 ```
 
-If there is a newer micro version available that `pymac` doesn't know about yet, just install it directly:
+If `pymac` fails to correctly detect the latest micro version available or if you need a specific micro version, just install it directly:
 
 ```bash
 # This will override whatever 3.10 micro version you had installed before
@@ -130,7 +127,7 @@ For fish completions:
 mkdir -p ~/.config/fish/completions; and ln -s -f ~/.pymac/completions/pymac.fish ~/.config/fish/completions/
 ```
 
-Adding `~/.config/pymac/default/bin` to your PATH is entirely optional. You can also call `pymac` Python installations directly with the `pymac exec` command. If you would like to be able to call or specify a Python version with `pythonMajor.Minor` (e.g. `python3.10`), make sure to add `~/.local/bin` to your PATH. Also ensure that `~/.local/bin` is in your PATH before `/usr/local/bin` because this is where Homebrew stores `pythonMajor.Minor` symlinks itself. Having `~/.local/bin` in your PATH before `/usr/local/bin` means that `pymac`'s Python versions are preferred over Homebrew if you have a Python version installed in both.
+Adding `~/.config/pymac/default/bin` to your PATH is entirely optional. You can also call `pymac` Python installations directly with the `pymac exec` command. If you would like to be able to call or specify a Python version with `pythonMajor.Minor` (e.g. `python3.10`), make sure to add `~/.local/bin` to your PATH. Also ensure that `~/.local/bin` is in your PATH before `/usr/local/bin` because this is where Homebrew stores `pythonMajor.Minor` symlinks. Having `~/.local/bin` in your PATH before `/usr/local/bin` means that `pymac`'s Python versions are preferred over Homebrew if you have the same Python version installed in both.
 
 Note: If you want to manage `pymac` installs with `pyenv` you should source `pyenv` _after_ adding `~/.config/pymac/default/bin` to your PATH.
 
@@ -138,7 +135,7 @@ Note: If you want to manage `pymac` installs with `pyenv` you should source `pye
 
 In short, because the Python.org installers have some advantages over other solutions:
 
-- You don't need to compile Python yourself. `pyenv` or `asdf-python` are great, but both require you to install Python build dependencies, and building Python might fail when you upgrade Mac OS and/or your device.
+- You don't need to compile Python yourself. `pyenv` or `asdf-python` require you to install Python build dependencies, and building Python might fail when you upgrade Mac OS and/or your device. `uv`'s Python installs [don't have all the features](https://hynek.me/articles/python-virtualenv-redux/) of Python.org installs.
 - If you typically just want the latest micro versions of Python, Python.org installations have the advantage that existing Major.Minor versions are updated in-place. This means you only have one Python version 3.10 or 3.11 for example. If you update Python 3.10.2 to 3.10.3 with the Python.org installer, 3.10.3 will override 3.10.2. Unless a micro version update of Python breaks your dependencies, the virtualenvs you've created with 3.10.2 will continue to work because they point to the same (updated) '3.10' directory.
 - [Unlike Homebrew Python](https://justinmayer.com/posts/homebrew-python-is-not-for-you/), installations from Python.org won't randomly break your virtualenvs because you stay in control of when and how Python versions are updated.
 
