@@ -119,5 +119,8 @@ complete -x -c pymac -n "__fish_seen_subcommand_from install" \
     -a --default \
     -d "Symlink Python version to ~/.config/pymac/default after install"
 complete -x -c pymac -n "__fish_seen_subcommand_from install" \
+    -a --interactive \
+    -d "Open the PKG in macOS Installer instead of installing via command line"
+complete -x -c pymac -n "__fish_seen_subcommand_from install" \
     -a --keep \
     -d "Do not delete PKG file after install completed, keep it in \$PYMAC_ROOT/cache"

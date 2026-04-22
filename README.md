@@ -12,6 +12,8 @@ Core features:
 
 ## Usage
 
+### Installing Python versions and setting default versions
+
 First, an important note: With the Python.org installer, you always only have one Major.Minor Python version (e.g. 3.10). Different micro versions are not installed separately. That said, let's install a few Python versions:
 
 ```bash
@@ -27,17 +29,13 @@ pymac default 3.9
 
 Please note that if you don't set a default, `pymac` only provides symlinks in `~/.local/bin` named "`pythonMajor.Minor`" (e.g. `python3.10`, see install below), no `python/pip` or `python3/pip3` commands are added to your PATH.
 
-If you want to call a specific version of Python that is not set as default:
+If you want to use the GUI installer, you can use the `--interactive` flag:
 
-```bash
-> pymac exec 3.10 --version
-Python 3.10.4
-> # If you have ~/.local/bin in your PATH you can also use:
-> python3.10 --version
-Python 3.10.4
+``` bash
+pymac install 3.14 --interactive
 ```
 
-Want to update to the latest known micro versions?
+### Updating Python versions
 
 ```bash
 pymac update 3.10
@@ -60,7 +58,19 @@ pymac list --full
 3.9.12
 ```
 
-Do you like to manage Python versions with [`pyenv`](https://github.com/pyenv/pyenv)?
+### pymac exec
+
+If you want to call a specific version of Python that is not set as default:
+
+```bash
+> pymac exec 3.10 --version
+Python 3.10.4
+> # If you have ~/.local/bin in your PATH you can also use:
+> python3.10 --version
+Python 3.10.4
+```
+
+### Pyenv integration
 
 ```bash
 pymac pyenv sync
@@ -165,13 +175,7 @@ The following features of the Python.org installer are excluded:
 - Python Documentation: Offline documentation.
 - Shell profile updater: Adds a line to your shell config (`.bash_profile`, `.zprofile`, or `config.fish`) that prepends the installed Python version to your PATH.
 
-If you need any of these features, `pymac` can still be useful for you. First, you can use it to download the installer using the `--keep` flag:
-
-```bash
-pymac install 3.10 --keep
-```
-
-After the download is completed, you can cancel `pymac`'s install process when you're asked for your root password and manually open the GUI installer stored in `~/.pymac/cache` instead. Once installed, `pymac` can still be used to manage your Python installation(s), e.g. to install or update SSL certificates or to uninstall a Python version. You can remove the downloaded PKG installer(s) with `pymac clear-cache`.
+If you need any of these features, use the `--interactive` flag mentioned above.
 
 ## List of commands
 

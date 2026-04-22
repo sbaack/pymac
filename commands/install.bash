@@ -7,10 +7,11 @@ help() {
   printf "Note that pymac only installs Python itself and Pip. The following additional\n"
   printf "features of the Python.org installer are excluded: GUI Applications, UNIX command\n"
   printf "line toos, Python Documentation, Shell profile updater.\n\n"
-  printf "Usage: pymac install <Major.Minor.Micro OR Major.Minor version number> [-d/--default] [-k/keep]\n\n"
+  printf "Usage: pymac install <Major.Minor.Micro OR Major.Minor version number> [-d/--default] [-i/--interactive] [-k/keep]\n\n"
   printf "Optional arguments:\n"
-  printf "  -d/--default: Symlink Python version to ~/.config/pymac/default after install\n"
-  printf "  -k/--keep:    Do not delete PKG file after install completed, keep it in \$PYMAC_ROOT/cache\n"
+  printf "  -d/--default:     Symlink Python version to ~/.config/pymac/default after install\n"
+  printf "  -i/--interactive: Open the PKG in macOS Installer instead of installing via command line\n"
+  printf "  -k/--keep:        Do not delete PKG file after install completed, keep it in \$PYMAC_ROOT/cache\n"
 }
 
 download_installer() {
@@ -114,12 +115,10 @@ symlink_executables() {
   ln -s -f "$py_bin_dir"/python"$py_version_short" ~/.local/bin/python"$py_version_short"
 }
 
-install() {
+resolve_version() {
+  # Resolve a user-provided version string into py_version_short,
+  # py_version_long, and pkg. These are set as globals for the caller.
   local py_version="$1"
-  local keep="$2"
-  local pkg
-  local py_version_short
-  local py_version_long
 
   # Split $py_version into an array structured as follows (using version 3.10.3 as an example):
   # ${PYVERSION[0]} = MAJOR (3)
@@ -163,6 +162,22 @@ install() {
   else
     pkg=python-"$py_version_long"-macosx10.9.pkg
   fi
+}
+
+interactive_install() {
+  local py_version="$1"
+  resolve_version "$py_version" || return 1
+  download_installer "$py_version_long" "$pkg" || return 1
+  open "$(pymac_dir)/cache/$pkg"
+  printf "Opened %s.\n" "$pkg"
+  printf "The PKG file is kept in %s/cache. Run 'pymac clear-cache' to remove it.\n" "$(pymac_dir)"
+}
+
+install() {
+  local py_version="$1"
+  local keep="$2"
+
+  resolve_version "$py_version" || return 1
 
   download_installer "$py_version_long" "$pkg" &&
     call_installer "$py_version_short" "$pkg" &&
@@ -176,6 +191,7 @@ install() {
 parse_args() {
   local py_version
   local default=false
+  local interactive=false
   local keep=false
   # Save count of args before potentially using shift
   # Used to determine if help should be printed when
@@ -200,6 +216,10 @@ parse_args() {
       default=true
       shift
       ;;
+    -i | --interactive)
+      interactive=true
+      shift
+      ;;
     -k | --keep)
       keep=true
       shift
@@ -220,13 +240,17 @@ parse_args() {
     esac
   done
 
-  if [[ (-z "$py_version" && $default == true) || (-z "$py_version" && $keep == true) ]]; then
+  if [[ -z "$py_version" && ($default == true || $interactive == true || $keep == true) ]]; then
     printf "Please provide a valid Python version number.\n"
     return 1
   fi
 
   if [[ -n "$py_version" ]]; then
-    install "$py_version" "$keep"
+    if [[ $interactive == true ]]; then
+      interactive_install "$py_version"
+    else
+      install "$py_version" "$keep"
+    fi
     if [[ $default == true ]]; then
       . "$(pymac_dir)"/commands/default.bash "$py_version"
     fi
