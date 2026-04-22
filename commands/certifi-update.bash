@@ -46,7 +46,7 @@ parse_args() {
       break
       ;;
     *)
-      printf "Invalid command. Check 'pymac add-certs help' for usage.\n"
+      printf "Invalid command. Check 'pymac certifi-update help' for usage.\n"
       break
       ;;
     esac
