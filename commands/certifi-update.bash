@@ -9,6 +9,9 @@ help() {
   printf "with pymac. You only need to run it separately if it failed during the\n"
   printf "installation or if you want to update the certifi package.\n\n"
   printf "Usage: pymac certifi-update <Major.Minor version number>\n"
+  printf "       pymac certifi-update --all\n\n"
+  printf "Optional arguments:\n"
+  printf "  -a/--all: Update certifi for all installed Python versions\n"
 }
 
 update_certifi() {
@@ -34,11 +37,29 @@ update_certifi() {
   fi
 }
 
+update_all_certifi() {
+  local versions_dir=/Library/Frameworks/Python.framework/Versions
+  local found=false
+  for entry in "$versions_dir"/[0-9].[0-9]*; do
+    local version="${entry##*/}"
+    found=true
+    printf "Updating certifi for Python %s...\n" "$version"
+    update_certifi "$version"
+  done
+  if [[ $found == false ]]; then
+    printf "No installed Python versions found.\n"
+  fi
+}
+
 parse_args() {
   while :; do
     case "$1" in
     [0-9][.][0-9]*)
       update_certifi "$1"
+      break
+      ;;
+    -a | --all)
+      update_all_certifi
       break
       ;;
     -h | help | --help | "")

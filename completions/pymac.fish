@@ -67,6 +67,9 @@ complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
 complete -x -c pymac -n "__fish_seen_subcommand_from certifi-update; \
     and not __fish_seen_subcommand_from (pymac list)" \
     -a "(pymac list)"
+complete -x -c pymac -n "__fish_seen_subcommand_from certifi-update" \
+    -a --all \
+    -d "Update certifi for all installed Python versions"
 complete -x -c pymac -n "__fish_seen_subcommand_from default; \
     and not __fish_seen_subcommand_from (pymac list)" \
     -a "(pymac list)"
