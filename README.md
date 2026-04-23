@@ -6,9 +6,10 @@ Core features:
 
 - Download and install Python.org versions entirely from the command line
 - Installs only the basics (Python itself, Pip, and SSL certificates), other features like GUI applications are excluded (see [What is excluded](#what-is-excluded))
-- Automatically picks latest known Python micro versions for you if you don't provide one
+- Managing Python.org installations: updating installed Python versions, setting default Python version, uninstalling versions, and more.
+- Automatically picks latest available Python micro versions with a Mac installer if you provide Major.Minor version (`pymac install 3.14`)
+- Warns user if latest Python micro version with a Mac installer is outdated
 - Integrates with [pyenv](https://github.com/pyenv/pyenv) (allows you to manage Python versions installed with Python.org installers like normal pyenv installs)
-- Various other conveniences to manage Python.org installations (e.g. setting default Python version, uninstalling versions, updating installed Python versions)
 
 ## Usage
 
@@ -17,14 +18,14 @@ Core features:
 First, an important note: With the Python.org installer, you always only have one Major.Minor Python version (e.g. 3.10). Different micro versions are not installed separately. That said, let's install a few Python versions:
 
 ```bash
-pymac install 3.10 --default
-pymac install 3.9.12
+pymac install 3.14 --default
+pymac install 3.13.13
 ```
 
 If you only provide Major.Minor versions, `pymac` will pick the latest micro version with a Mac installer on https://www.python.org/ftp/python/. If you specify a micro version, this version will be picked instead. Python.org installers will install Python versions at `/Library/Frameworks/Python.framework/Versions/`, so your root password is required. Using the `--default` flag creates a symlink to `~/.config/pymac/default`, which you can add to your PATH so that the `python` or `pip` commands call this version of Python (see [Installation](#installation)). You can change the default any time:
 
 ```bash
-pymac default 3.9
+pymac default 3.13
 ```
 
 Please note that if you don't set a default, `pymac` only provides symlinks in `~/.local/bin` named "`pythonMajor.Minor`" (e.g. `python3.10`, see install below), no `python/pip` or `python3/pip3` commands are added to your PATH.
@@ -38,7 +39,7 @@ pymac install 3.14 --interactive
 ### Updating Python versions
 
 ```bash
-pymac update 3.10
+pymac update 3.14
 # Or check updates for all
 pymac update-all
 ```
@@ -46,16 +47,16 @@ pymac update-all
 If `pymac` fails to correctly detect the latest micro version available or if you need a specific micro version, just install it directly:
 
 ```bash
-# This will override whatever 3.10 micro version you had installed before
-pymac install 3.10.5
+# This will override whatever 3.13 micro version you had installed before
+pymac install 3.13.10
 ```
 
 To see what micro versions are currently installed:
 
 ```bash
 pymac list --full
-3.10.4
-3.9.12
+3.13 (3.13.13)
+3.14 (3.14.4)
 ```
 
 ### pymac exec
@@ -63,11 +64,11 @@ pymac list --full
 If you want to call a specific version of Python that is not set as default:
 
 ```bash
-> pymac exec 3.10 --version
-Python 3.10.4
+> pymac exec 3.13 --version
+Python 3.13.13
 > # If you have ~/.local/bin in your PATH you can also use:
-> python3.10 --version
-Python 3.10.4
+> python3.13 --version
+Python 3.13.13
 ```
 
 ### Pyenv integration
@@ -79,28 +80,29 @@ pymac pyenv sync
 This creates symlinks to `pymac` installs in `$PYENV_ROOT/versions`, which allows you to manage them with `pyenv`'s shims. `pymac` names its versions as Major.Minor to distinguish them from `pyenv` installs, which are named as Major.Minor.Micro:
 
 ```bash
-# In this example we added pymac symlinks for 3.10 and 3.9
-# Version 3.10.3 is a pyenv install
+# In this example we added pymac symlinks for 3.13 and 3.14
+# Version 3.13.10 is a pyenv install
 > pyenv versions
 * system (set by /Users/stefan/.pyenv/version)
-  3.10
-  3.10.3
-  3.9
-> pyenv global 3.10
+  3.13
+  3.13.10
+  3.14
+> pyenv global 3.13
 > pyenv versions
   system
-* 3.10 (set by /Users/stefan/.pyenv/version)
-  3.10.3
-  3.9
+* 3.13 (set by /Users/stefan/.pyenv/version)
+  3.13.10
+  3.14
 ```
 
 To remove symlinks to pyenv:
 
 ```bash
 # Remove a specific version or all
-pymac pyenv remove 3.9
+pymac pyenv remove 3.13
 pymac pyenv remove-all
 ```
+
 See the [List of commands](#list-of-commands) for more options.
 
 ## Installation
@@ -145,8 +147,8 @@ Note: If you want to manage `pymac` installs with `pyenv` you should source `pye
 
 In short, because the Python.org installers have some advantages over other solutions:
 
-- You don't need to compile Python yourself. `pyenv` or `asdf-python` require you to install Python build dependencies, and building Python might fail when you upgrade Mac OS and/or your device. `uv`'s Python installs [don't have all the features](https://hynek.me/articles/python-virtualenv-redux/) of Python.org installs.
-- If you typically just want the latest micro versions of Python, Python.org installations have the advantage that existing Major.Minor versions are updated in-place. This means you only have one Python version 3.10 or 3.11 for example. If you update Python 3.10.2 to 3.10.3 with the Python.org installer, 3.10.3 will override 3.10.2. Unless a micro version update of Python breaks your dependencies, the virtualenvs you've created with 3.10.2 will continue to work because they point to the same (updated) '3.10' directory.
+- You don't need to compile Python yourself and more features. `pyenv` or `asdf-python` require you to install Python build dependencies, and building Python might fail when you upgrade Mac OS and/or your device. `uv`'s Python installs [don't have all the features](https://hynek.me/articles/python-virtualenv-redux/) of Python.org installs.
+- If you typically just want the latest micro versions of Python, Python.org installations have the advantage that existing Major.Minor versions are updated in-place. This means you only have one Python version 3.13 or 3.14 for example. If you update Python 3.13.10 to 3.13.13 with the Python.org installer, 3.13.13 will override 3.13.10. Unless a micro version update of Python breaks your dependencies, the virtualenvs you've created with 3.13.10 will continue to work because they point to the same (updated) '3.13' directory.
 - [Unlike Homebrew Python](https://justinmayer.com/posts/homebrew-python-is-not-for-you/), installations from Python.org won't randomly break your virtualenvs because you stay in control of when and how Python versions are updated.
 
 `pymac` is about utilizing the advantages of Python.org installers while mitigating some of their inconveniences:
