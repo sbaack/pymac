@@ -15,9 +15,14 @@ update() {
     return 1
   fi
   local latest_available=${LATEST_PKG_INFO[0]}
+  local outdated=${LATEST_PKG_INFO[1]}
 
   if [[ $installed_py_version == "$latest_available" ]]; then
-    printf "Version %s is already at the latest version available with a Mac installer (%s).\n" "$py_version" "$installed_py_version"
+    if [[ -n $outdated ]]; then
+      printf "Warning: Latest %s version only available as source code (last version with Mac installer: %s).\n" "$py_version" "$latest_available"
+    else
+      printf "%s is up-to-date (%s).\n" "$py_version" "$installed_py_version"
+    fi
   else
     printf "Updating %s to %s...\n" "$installed_py_version" "$latest_available"
     . "$(pymac_dir)"/commands/install.bash "$latest_available"
