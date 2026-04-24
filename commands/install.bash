@@ -146,7 +146,7 @@ resolve_version() {
     if [[ -n $outdated ]]; then
       printf "You're about to install an outdated version of Python %s (%s)\n" "$py_version_short" "$py_version_long"
       printf "The latest security updates for %s are only available as source code.\n" "$py_version_short"
-      printf "You can install them with other tools like pyenv or asdf-python.\n"
+      printf "You can install them with other tools like uv, pyenv, or asdf-python.\n"
       read -r -p "Continue anyway? [y/n] " input
       if ! [[ $input =~ ^(yes|y|Y|Yes|YES)$ ]]; then
         return 1
