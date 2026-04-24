@@ -20,11 +20,16 @@ update_certifi() {
   local cert_file="$py_dir"/etc/openssl/cert.pem
 
   # Install https://pypi.org/project/certifi/ into local site-packages
-  # Set PIP_REQUIRE_VIRTUALENV to false to make sure this works if pip
-  # is configured to only allow installing packages in virtualenvs
-  if PIP_REQUIRE_VIRTUALENV=false \
-    "$py_dir"/bin/python3 -E -m \
-    pip install --upgrade pip certifi; then
+  # Prefer uv if available, fall back to pip
+  if command -v uv &>/dev/null; then
+    local install_cmd=(uv pip install --python "$py_dir"/bin/python3 --upgrade certifi)
+  else
+    # Set PIP_REQUIRE_VIRTUALENV to false to make sure this works if pip
+    # is configured to only allow installing packages in virtualenvs
+    local install_cmd=(env PIP_REQUIRE_VIRTUALENV=false
+      "$py_dir"/bin/python3 -E -m pip install --upgrade pip certifi)
+  fi
+  if "${install_cmd[@]}"; then
     # Remove old cert file if it exists
     rm -f "$cert_file"
     # Symlink certifi's cacert.pem to $cert_file
