@@ -16,8 +16,8 @@ help() {
   printf "  list:           List Python versions installed via Python.org installer\n"
   printf "  pyenv:          Manage symlinks of Python.org installations in \$PYENV_ROOT/versions\n"
   printf "  uninstall:      Remove Python version\n"
-  printf "  update:         Update specified Python to the latest known Micro version (e.g. updates 3.14.1 to 3.14.2)\n"
-  printf "  update-all:     Update all pymac installs to latest known Micro versions\n"
+  printf "  update:         Update specified Python to the latest available Micro version (e.g. updates 3.14.1 to 3.14.2)\n"
+  printf "  update-all:     Update all pymac installs to latest available Micro versions\n"
   printf "  upgrade:        Update pymac itself to the latest HEAD version\n\n"
   printf "See 'pymac <command> help' for more information.\n"
 }

@@ -215,8 +215,8 @@ Commands:
   list:           List Python versions installed via Python.org installer
   pyenv:          Manage symlinks of Python.org installations in $PYENV_ROOT/versions
   uninstall:      Remove Python version
-  update:         Update specified Python to the latest known Micro version (e.g. updates 3.10.1 to 3.10.2)
-  update-all:     Update all pymac installs to latest known Micro versions
+  update:         Update specified Python to the latest available Micro version (e.g. updates 3.10.1 to 3.10.2)
+  update-all:     Update all pymac installs to latest available Micro versions
   upgrade:        Update pymac itself to the latest HEAD version
 
 See 'pymac <command> help' for more information.

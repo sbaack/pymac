@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 help() {
-  printf "Update all Python version installed via pymac to the latest known Micro versions.\n\n"
+  printf "Update all Python version installed via pymac to the latest available Micro versions.\n\n"
   printf "Usage: pymac update-all\n"
 }
 

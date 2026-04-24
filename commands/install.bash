@@ -2,7 +2,7 @@
 
 help() {
   printf "Download, install and set up Python version. If only Major.Minor version\n"
-  printf "number provided (e.g. 3.10), the latest known Micro version number is picked\n"
+  printf "number provided (e.g. 3.10), the latest available Micro version number is picked\n"
   printf "(e.g. 3.10.4).\n\n"
   printf "Note that pymac only installs Python itself and Pip. The following additional\n"
   printf "features of the Python.org installer are excluded: GUI Applications, UNIX command\n"

@@ -55,10 +55,10 @@ complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -d "Remove Python version"
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a update \
-    -d "Update specified Python to the latest known Micro version (e.g. updates 3.10.1 to 3.10.2)"
+    -d "Update specified Python to the latest available Micro version (e.g. updates 3.10.1 to 3.10.2)"
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a update-all \
-    -d "Update all pymac installs to latest known Micro versions"
+    -d "Update all pymac installs to latest available Micro versions"
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a upgrade \
     -d "Update pymac itself to the latest HEAD version"
