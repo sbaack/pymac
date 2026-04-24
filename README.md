@@ -36,6 +36,8 @@ If you want to use the GUI installer, you can use the `--interactive` flag:
 pymac install 3.14 --interactive
 ```
 
+Note that `pymac` will not customize Python versions installed with the GUI installer automatically by creating symlinks and installing `certifi` for you. See [How it works](#how-it-works).
+
 ### Updating Python versions
 
 ```bash
