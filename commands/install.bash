@@ -42,10 +42,10 @@ download_installer() {
       printf "%s\n\n" "$url"
       printf "Possible reasons:\n"
       printf "  - The provided Python version doesn't exist\n"
-      printf "  - There is no Mac installer for the provided Python version\n"
+      printf "  - There is no macOS installer for the provided Python version\n"
       printf "  - pymac hasn't been updated to reflect changes in Python.org's structure and/or naming schemes\n\n"
       printf "Please report a bug if you see this message but are sure that the Python version exists\n"
-      printf "and has a Mac installer.\n"
+      printf "and has a macOS installer.\n"
       exit 1
     fi
   fi
@@ -136,7 +136,7 @@ resolve_version() {
     py_version_short="${PYVERSION[0]}.${PYVERSION[1]}"
   else
     # If MAJOR.MINOR provided, query python.org for the latest version
-    # that has a Mac PKG installer
+    # that has a macOS PKG installer
     py_version_short="$py_version"
     if ! get_latest_pkg_version "$py_version_short"; then
       return 1
@@ -156,7 +156,7 @@ resolve_version() {
 
   # Use minor Python version to determine file name of pkg installer
   # Needed because Python.org introduced a new 'universal' installer
-  # for Mac in Python 3.8.
+  # for macOS in Python 3.8.
   if [[ ${PYVERSION[1]} -gt 8 ]]; then
     pkg=python-"$py_version_long"-macos11.pkg
   else

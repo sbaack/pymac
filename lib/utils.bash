@@ -29,7 +29,7 @@ is_installed() {
 }
 
 get_latest_pkg_version() {
-  # Look up the latest Mac PKG version for a given Major.Minor and parse
+  # Look up the latest macOS PKG version for a given Major.Minor and parse
   # the result into the LATEST_PKG_INFO global array:
   #   LATEST_PKG_INFO[0] = version string (e.g. "3.13.13")
   #   LATEST_PKG_INFO[1] = "outdated" if newer source-only releases exist
@@ -43,7 +43,7 @@ get_latest_pkg_version() {
 
 _scrape_pkg_versions() {
   # Query python.org to find the latest version of a given Major.Minor
-  # that has a Mac PKG installer available.
+  # that has a macOS PKG installer available.
   #
   # Output (stdout):
   #   Line 1: version string (e.g. "3.13.13" or "3.15.0a8")
@@ -68,7 +68,7 @@ _scrape_pkg_versions() {
     return 1
   fi
 
-  # Starting from the highest micro version, check if a Mac PKG exists.
+  # Starting from the highest micro version, check if a macOS PKG exists.
   # If we have to skip versions before finding a PKG, the series has
   # moved to source-only releases (i.e. the macOS installer version is "outdated").
   local version
@@ -94,6 +94,6 @@ _scrape_pkg_versions() {
     skipped=true
   done
 
-  printf "No Mac installer found for any Python %s release.\n" "$py_version_short" >&2
+  printf "No macOS installer found for any Python %s release.\n" "$py_version_short" >&2
   return 1
 }

@@ -19,7 +19,7 @@ update() {
 
   if [[ $installed_py_version == "$latest_available" ]]; then
     if [[ -n $outdated ]]; then
-      printf "Warning: Latest %s version only available as source code (last version with Mac installer: %s).\n" "$py_version" "$latest_available"
+      printf "Warning: Latest %s version only available as source code (last version with macOS installer: %s).\n" "$py_version" "$latest_available"
     else
       printf "%s is up-to-date (%s).\n" "$py_version" "$installed_py_version"
     fi
