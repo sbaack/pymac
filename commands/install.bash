@@ -165,19 +165,14 @@ resolve_version() {
 }
 
 interactive_install() {
-  local py_version="$1"
-  resolve_version "$py_version" || return 1
   download_installer "$py_version_long" "$pkg" || return 1
   open "$(pymac_dir)/cache/$pkg"
   printf "Opened %s.\n" "$pkg"
   printf "The PKG file is kept in %s/cache. Run 'pymac clear-cache' to remove it.\n" "$(pymac_dir)"
 }
 
-install() {
-  local py_version="$1"
-  local keep="$2"
-
-  resolve_version "$py_version" || return 1
+cli_install() {
+  local keep="$1"
 
   download_installer "$py_version_long" "$pkg" &&
     call_installer "$py_version_short" "$pkg" &&
@@ -185,6 +180,34 @@ install() {
     . "$(pymac_dir)"/commands/certifi-update.bash "$py_version_short"
   if ! [[ $keep == true ]]; then
     rm "$(pymac_dir)"/cache/"$pkg"
+  fi
+}
+
+install() {
+  local py_version="$1"
+  local keep="$2"
+  local interactive="$3"
+
+  resolve_version "$py_version" || return 1
+
+  # Check if the exact version to be installed is already present by
+  # querying the installed Python binary's --version output. This avoids
+  # an unnecessary download and sudo prompt when the user is already
+  # up-to-date. Only an exact match triggers the prompt — e.g. if 3.14.1
+  # is installed and 3.14.2 is requested, installation proceeds normally.
+  local py_bin_to_check=/Library/Frameworks/Python.framework/Versions/"$py_version_short"/bin/python"$py_version_short"
+  if [[ -x $py_bin_to_check && $("$py_bin_to_check" --version 2>&1 | sed 's/Python //') == "$py_version_long" ]]; then
+    printf "Python %s is already installed.\n" "$py_version_long"
+    read -r -p "Reinstall? [y/n] " input
+    if ! [[ $input =~ ^(yes|y|Y|Yes|YES)$ ]]; then
+      return 0
+    fi
+  fi
+
+  if [[ $interactive == true ]]; then
+    interactive_install
+  else
+    cli_install "$keep"
   fi
 }
 
@@ -246,11 +269,7 @@ parse_args() {
   fi
 
   if [[ -n "$py_version" ]]; then
-    if [[ $interactive == true ]]; then
-      interactive_install "$py_version"
-    else
-      install "$py_version" "$keep"
-    fi
+    install "$py_version" "$keep" "$interactive"
     if [[ $default == true ]]; then
       . "$(pymac_dir)"/commands/default.bash "$py_version"
     fi
