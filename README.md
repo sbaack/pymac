@@ -15,7 +15,7 @@ Core features:
 
 ### Installing Python versions and setting default versions
 
-First, an important note: With the Python.org installer, you always only have one Major.Minor Python version (e.g. 3.10). Different micro versions are not installed separately. That said, let's install a few Python versions:
+First, an important note: With the Python.org installer, you always only have one Major.Minor Python version (e.g. 3.13). Different micro versions are not installed separately. That said, let's install a few Python versions:
 
 ```bash
 pymac install 3.14 --default
@@ -133,7 +133,23 @@ set -x PATH ~/.config/pymac/default/bin "$PATH"
 set -x PATH ~/.local/bin "$PATH"
 ```
 
-For fish completions:
+### Shell completions
+
+For zsh, add this to your `~/.zshrc` (after `compinit`):
+
+```bash
+[[ -e "$HOME/.pymac/completions/pymac.zsh" ]] && source "$HOME/.pymac/completions/pymac.zsh"
+```
+
+For bash, add this to your `~/.bashrc`:
+
+```bash
+[[ -e "$HOME/.pymac/completions/pymac.bash" ]] && source "$HOME/.pymac/completions/pymac.bash"
+```
+
+Note: The bash completions require bash 4.0+. macOS ships with bash 3. If you're using bash on macOS, install a newer version via [Homebrew](https://brew.sh/) (`brew install bash`).
+
+For fish:
 
 ```bash
 mkdir -p ~/.config/fish/completions; and ln -s -f ~/.pymac/completions/pymac.fish ~/.config/fish/completions/
