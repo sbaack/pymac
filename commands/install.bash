@@ -75,6 +75,46 @@ generate_choices_xml() {
   printf "%s" "$choices" >"$(pymac_dir)"/choices_xml/choices_"$py_version".xml
 }
 
+verify_pkg_signature() {
+  # Verify the downloaded PKG was signed by an expected Python.org signer
+  # and run Apple's notarization/Gatekeeper assessment before handing it
+  # to sudo installer.
+  #
+  # Python 3.11+ PKGs are signed by the Python Software Foundation; earlier
+  # PKGs are signed by core developer Ned Deily.
+  local pkg="$1"
+  local py_version_short="$2"
+  local pkg_path="$(pymac_dir)/cache/$pkg"
+  local sig_output
+  if ! sig_output=$(pkgutil --check-signature "$pkg_path" 2>&1); then
+    printf "Signature verification failed for %s.\n" "$pkg" >&2
+    printf "The PKG is unsigned or its signature is invalid. Refusing to install.\n" >&2
+    return 1
+  fi
+
+  # Run Apple's notarization / Gatekeeper assessment.
+  # Catches PKGs that were never notarized or whose signing cert was revoked.
+  if ! spctl --assess --type install "$pkg_path" >/dev/null 2>&1; then
+    printf "Notarization check failed for %s.\n" "$pkg" >&2
+    printf "Apple Gatekeeper rejected this installer (not notarized or revoked).\n" >&2
+    return 1
+  fi
+
+  local minor=${py_version_short#*.}
+  local expected_signer
+  if [[ $minor -ge 11 ]]; then
+    expected_signer="Python Software Foundation"
+  else
+    expected_signer="Ned Deily"
+  fi
+
+  if ! grep -q "$expected_signer" <<<"$sig_output"; then
+    printf "Signature verification failed for %s.\n" "$pkg" >&2
+    printf "Expected signer '%s' not found in the certificate chain.\n" "$expected_signer" >&2
+    return 1
+  fi
+}
+
 call_installer() {
   local py_version_short="$1"
   local pkg="$2"
@@ -166,6 +206,7 @@ resolve_version() {
 
 interactive_install() {
   download_installer "$py_version_long" "$pkg" || return 1
+  verify_pkg_signature "$pkg" "$py_version_short" || return 1
   open "$(pymac_dir)/cache/$pkg"
   printf "Opened %s.\n" "$pkg"
   printf "The PKG file is kept in %s/cache. Run 'pymac clear-cache' to remove it.\n" "$(pymac_dir)"
@@ -175,6 +216,7 @@ cli_install() {
   local keep="$1"
 
   download_installer "$py_version_long" "$pkg" &&
+    verify_pkg_signature "$pkg" "$py_version_short" &&
     call_installer "$py_version_short" "$pkg" &&
     symlink_executables "$py_version_short" &&
     . "$(pymac_dir)"/commands/certifi-update.bash "$py_version_short"
