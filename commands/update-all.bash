@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 help() {
-  printf "Update all Python version installed via pymac to the latest available Micro versions.\n\n"
+  printf "Update all Python versions installed via pymac to the latest available Micro versions.\n\n"
   printf "Usage: pymac update-all\n"
 }
 
@@ -30,7 +30,7 @@ parse_args() {
       break
       ;;
     *)
-      printf "Invalid command. Check 'pymac update help' for usage.\n"
+      printf "Invalid command. Check 'pymac update-all help' for usage.\n"
       break
       ;;
     esac

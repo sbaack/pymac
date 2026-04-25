@@ -6,7 +6,7 @@ help() {
   printf "a virtualenv with a specific version ('pymac exec 3.10 -m venv <name>')\n"
   printf "and more. Just calling 'pymac exec <version>' without additional args\n"
   printf "will start Python REPL with the specified version.\n\n"
-  printf "Usage: pymac exec <Minor.Major version> <args to Python or file>\n"
+  printf "Usage: pymac exec <Major.Minor version> <args to Python or file>\n"
 }
 
 exec_py() {
@@ -28,7 +28,7 @@ parse_args() {
       break
       ;;
     *)
-      printf "Invalid command. Check 'pymac update help' for usage.\n"
+      printf "Invalid command. Check 'pymac exec help' for usage.\n"
       break
       ;;
     esac

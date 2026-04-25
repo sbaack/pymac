@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 help() {
-  printf "Install and set up SSL root certificats from certifi package.\n"
+  printf "Install and set up SSL root certificates from certifi package.\n"
   printf "Replicates the 'Install Certificates.command' that comes with the\n"
   printf "GUI applications from the Python.org installer. Required because\n"
   printf "Python.org installers include their own private copy of OpenSSL.\n\n"
