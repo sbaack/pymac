@@ -36,7 +36,14 @@ download_installer() {
     # Check if URL is available
     status_code=$(curl -o /dev/null --silent -Iw '%{http_code}' "$url")
     if [[ $status_code == "200" ]]; then
-      curl -O -L --output-dir "$cache_dir" "$url"
+      # --fail makes curl exit non-zero on HTTP errors so a 4xx/5xx
+      # mid-download doesn't leave an error body masquerading as a PKG.
+      # On any curl failure, remove the partial/empty file so the next
+      # attempt re-downloads instead of skipping due to the existence check.
+      if ! curl --fail -O -L --output-dir "$cache_dir" "$url"; then
+        rm -f "$cache_dir/$pkg"
+        return 1
+      fi
     else
       printf "The following URL is not available:\n"
       printf "%s\n\n" "$url"
@@ -89,6 +96,7 @@ verify_pkg_signature() {
   if ! sig_output=$(pkgutil --check-signature "$pkg_path" 2>&1); then
     printf "Signature verification failed for %s.\n" "$pkg" >&2
     printf "The PKG is unsigned or its signature is invalid. Refusing to install.\n" >&2
+    printf "If the download was canceled or otherwise corrupted, run 'pymac clear-cache' and try again.\n" >&2
     return 1
   fi
 
