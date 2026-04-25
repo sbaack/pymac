@@ -13,6 +13,12 @@ uninstall() {
   if sudo rm -rf "$py_dir"; then
     # Remove symlink in ~/.local/bin
     rm -f ~/.local/bin/python"$py_version"
+    # If this version was the current pymac default, remove the now-dangling symlink
+    local default_link=~/.config/pymac/default
+    if [[ -L $default_link && $(basename "$(readlink "$default_link")") == "$py_version" ]]; then
+      rm "$default_link"
+      printf "%s was set as pymac default, removing dead symlink.\n" "$py_version"
+    fi
   else
     printf "Failed to delete Python version %s.\n" "$py_version"
     return 1
