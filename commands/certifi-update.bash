@@ -38,7 +38,7 @@ update_certifi() {
     chmod 755 "$cert_file"
   else
     printf "Failed to install certifi.\n"
-    exit 1
+    return 1
   fi
 }
 

@@ -46,7 +46,7 @@ download_installer() {
       printf "  - pymac hasn't been updated to reflect changes in Python.org's structure and/or naming schemes\n\n"
       printf "Please report a bug if you see this message but are sure that the Python version exists\n"
       printf "and has a macOS installer.\n"
-      exit 1
+      return 1
     fi
   fi
 }
@@ -123,10 +123,10 @@ call_installer() {
 
   # Generate choice XML file if necessary
   if [[ ! -e $choice_xml ]]; then
-    generate_choices_xml "$py_version_short" || exit 1
+    generate_choices_xml "$py_version_short" || return 1
   fi
 
-  sudo installer -applyChoiceChangesXML "$choice_xml" -pkg "$(pymac_dir)"/cache/"$pkg" -target / || exit 1
+  sudo installer -applyChoiceChangesXML "$choice_xml" -pkg "$(pymac_dir)"/cache/"$pkg" -target / || return 1
 }
 
 symlink_executables() {
@@ -167,7 +167,7 @@ resolve_version() {
   IFS='.' read -ra PYVERSION <<<"$py_version"
   if [[ ${PYVERSION[0]} -lt 3 || "${PYVERSION[1]}" -lt 6 ]]; then
     printf "Minimum supported version is Python 3.6.\n"
-    exit 1
+    return 1
   fi
 
   # If MAJOR.MINOR.MICRO provided (e.g. 3.10.2), use it directly

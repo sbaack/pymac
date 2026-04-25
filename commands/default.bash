@@ -29,7 +29,7 @@ parse_args() {
       ;;
     *)
       printf "Invalid option. See 'pymac default help' for usage.\n"
-      exit 1
+      return 1
       ;;
     esac
   done

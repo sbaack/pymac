@@ -40,8 +40,8 @@ parse_args() {
       return 0
       ;;
     *)
-      printf "Invalid option. See 'pymac default help' for usage.\n"
-      exit 1
+      printf "Invalid option. See 'pymac default-which help' for usage.\n"
+      return 1
       ;;
     esac
   done
