@@ -214,15 +214,24 @@ interactive_install() {
 
 cli_install() {
   local keep="$1"
+  local install_status=$?
+  local pkg_path
+  pkg_path="$(pymac_dir)/cache/$pkg"
 
   download_installer "$py_version_long" "$pkg" &&
     verify_pkg_signature "$pkg" "$py_version_short" &&
     call_installer "$py_version_short" "$pkg" &&
     symlink_executables "$py_version_short" &&
     . "$(pymac_dir)"/commands/certifi-update.bash "$py_version_short"
-  if ! [[ $keep == true ]]; then
-    rm "$(pymac_dir)"/cache/"$pkg"
+
+  if [[ $install_status -eq 0 ]]; then
+    if [[ $keep != true ]]; then
+      rm "$pkg_path"
+    fi
+  elif [[ -e $pkg_path ]]; then
+    printf "Install failed. PKG kept at %s for retry.\n" "$pkg_path" >&2
   fi
+  return $install_status
 }
 
 install() {
@@ -311,8 +320,7 @@ parse_args() {
   fi
 
   if [[ -n "$py_version" ]]; then
-    install "$py_version" "$keep" "$interactive"
-    if [[ $default == true ]]; then
+    if install "$py_version" "$keep" "$interactive" && [[ $default == true ]]; then
       . "$(pymac_dir)"/commands/default.bash "$py_version"
     fi
   fi
