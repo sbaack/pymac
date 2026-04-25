@@ -37,7 +37,7 @@ get_latest_pkg_version() {
   # Returns 0 on success, 1 on failure.
   local py_version_short="$1"
   LATEST_PKG_INFO=()
-  IFS=$'\n' read -d '' -r -a LATEST_PKG_INFO <<< "$(_scrape_pkg_versions "$py_version_short")"
+  IFS=$'\n' read -d '' -r -a LATEST_PKG_INFO <<<"$(_scrape_pkg_versions "$py_version_short")"
   [[ -n ${LATEST_PKG_INFO[0]} ]]
 }
 
@@ -54,17 +54,23 @@ _scrape_pkg_versions() {
   local base_url="https://www.python.org/ftp/python/"
 
   # Fetch the FTP index and extract version directories matching the
-  # requested Major.Minor, then sort by micro version descending
+  # requested Major.Minor, then sort by micro version descending. Capture
+  # curl's output separately so its exit code is observable — without this,
+  # we can't distinguish a network failure from a missing version.
+  local index_html
+  if ! index_html=$(curl -sf --max-time 10 "$base_url"); then
+    printf "Could not reach python.org. Check your internet connection.\n" >&2
+    return 1
+  fi
   local versions
   versions=$(
-    curl -s --max-time 10 "$base_url" |
+    printf "%s" "$index_html" |
       sed -n "s/.*href=\"\(${py_version_short}\.[0-9][0-9]*\)\/.*/\1/p" |
       sort -t. -k3 -n -r
   )
 
   if [[ -z $versions ]]; then
     printf "Could not find Python %s on python.org.\n" "$py_version_short" >&2
-    printf "Check that the version exists and that you have a working internet connection.\n" >&2
     return 1
   fi
 
@@ -74,9 +80,14 @@ _scrape_pkg_versions() {
   local version
   local skipped=false
   for version in $versions; do
+    local pkg_html
+    if ! pkg_html=$(curl -sf --max-time 10 "${base_url}${version}/"); then
+      printf "Could not reach python.org. Check your internet connection.\n" >&2
+      return 1
+    fi
     local pkg_name
     pkg_name=$(
-      curl -s --max-time 10 "${base_url}${version}/" |
+      printf "%s" "$pkg_html" |
         sed -n 's/.*href="\(python-[^"]*-macos[^"]*\.pkg\)".*/\1/p' |
         sort -r |
         head -1
