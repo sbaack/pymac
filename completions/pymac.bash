@@ -23,7 +23,7 @@ _pymac() {
   local cur prev words cword
   _init_completion || return
 
-  local commands="certifi-update certifi-update-all clear-cache default default-which exec help install list pyenv uninstall update update-all upgrade"
+  local commands="certifi-update certifi-update-all clear-cache default default-which exec help install list pyenv self-update uninstall update update-all"
 
   # Find the subcommand (first non-option word after pymac)
   local subcmd=""

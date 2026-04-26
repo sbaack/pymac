@@ -18,7 +18,7 @@ end
 
 # Top-level commands
 set -l pymac_commands certifi-update certifi-update-all clear-cache default default-which \
-    exec help install list pyenv uninstall update update-all upgrade
+    exec help install list pyenv self-update uninstall update update-all
 
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a certifi-update \
@@ -54,6 +54,9 @@ complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a pyenv \
     -d "Manage symlinks of Python.org installations in \$PYENV_ROOT/versions"
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
+    -a self-update \
+    -d "Update pymac itself to the latest HEAD version"
+complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a uninstall \
     -d "Remove Python version"
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
@@ -62,9 +65,6 @@ complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a update-all \
     -d "Update all pymac installs to latest available Micro versions"
-complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
-    -a upgrade \
-    -d "Update pymac itself to the latest HEAD version"
 
 # Command arguments
 complete -x -c pymac -n "__fish_seen_subcommand_from certifi-update; \

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 help() {
-  printf "Upgrade pymac itself to the latest HEAD version.\n\n"
-  printf "Usage: pymac upgrade\n"
+  printf "Update pymac itself to the latest HEAD version.\n\n"
+  printf "Usage: pymac self-update\n"
 }
 
-upgrade() {
+self_update() {
   (
     cd "$(pymac_dir)" || exit 1
     git fetch origin main
@@ -18,7 +18,7 @@ parse_args() {
   while :; do
     case "$1" in
     "")
-      upgrade
+      self_update
       break
       ;;
     -h | help | --help)
@@ -26,7 +26,7 @@ parse_args() {
       break
       ;;
     *)
-      printf "Invalid command. Check 'pymac upgrade help' for usage.\n"
+      printf "Invalid command. Check 'pymac self-update help' for usage.\n"
       break
       ;;
     esac

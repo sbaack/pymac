@@ -35,10 +35,10 @@ _pymac() {
     'install:Download and (re)install Python version'
     'list:List Python versions installed via Python.org installer'
     'pyenv:Manage symlinks of Python.org installations in $PYENV_ROOT/versions'
+    'self-update:Update pymac itself to the latest HEAD version'
     'uninstall:Remove Python version'
     'update:Update specified Python to the latest available Micro version'
     'update-all:Update all pymac installs to latest available Micro versions'
-    'upgrade:Update pymac itself to the latest HEAD version'
   )
 
   _arguments -C \

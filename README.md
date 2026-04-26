@@ -215,10 +215,10 @@ Commands:
   install:        Download and (re)install Python version
   list:           List Python versions installed via Python.org installer
   pyenv:          Manage symlinks of Python.org installations in $PYENV_ROOT/versions
+  self-update:    Update pymac itself to the latest HEAD version
   uninstall:      Remove Python version
   update:         Update specified Python to the latest available Micro version (e.g. updates 3.10.1 to 3.10.2)
   update-all:     Update all pymac installs to latest available Micro versions
-  upgrade:        Update pymac itself to the latest HEAD version
 
 See 'pymac <command> help' for more information.
 ```

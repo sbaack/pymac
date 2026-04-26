@@ -16,10 +16,10 @@ help() {
   printf "  install:            Download and (re)install Python version\n"
   printf "  list:               List Python versions installed via Python.org installer\n"
   printf "  pyenv:              Manage symlinks of Python.org installations in \$PYENV_ROOT/versions\n"
+  printf "  self-update:        Update pymac itself to the latest HEAD version\n"
   printf "  uninstall:          Remove Python version\n"
   printf "  update:             Update specified Python to the latest available Micro version (e.g. updates 3.14.1 to 3.14.2)\n"
-  printf "  update-all:         Update all pymac installs to latest available Micro versions\n"
-  printf "  upgrade:            Update pymac itself to the latest HEAD version\n\n"
+  printf "  update-all:         Update all pymac installs to latest available Micro versions\n\n"
   printf "See 'pymac <command> help' for more information.\n"
 }
 
@@ -63,7 +63,7 @@ pymac_cmd() {
       fi
       break
       ;;
-    certifi-update-all | clear-cache | default-which | install | list | pyenv | update-all | upgrade)
+    certifi-update-all | clear-cache | default-which | install | list | pyenv | self-update | update-all)
       shift
       # shellcheck disable=1090
       . "$(pymac_dir)"/commands/"$command".bash "$@"
