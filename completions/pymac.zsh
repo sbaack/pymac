@@ -26,6 +26,7 @@ _pymac() {
   local -a subcommands
   subcommands=(
     'certifi-update:Update/install and symlink SSL certificates in specified Python version'
+    'certifi-update-all:Update certifi package for all Python versions installed via pymac'
     'clear-cache:Delete downloaded PKG installers'
     'default:Set Python version symlinked to ~/.config/pymac/default'
     'default-which:Show Python version symlinked to ~/.config/pymac/default'
@@ -51,9 +52,7 @@ _pymac() {
   args)
     case "${words[1]}" in
     certifi-update)
-      local -a versions
-      versions=(${(f)"$(pymac list 2>/dev/null)"})
-      compadd -- --all -a "${versions[@]}"
+      _arguments '1:version:_pymac_list_versions'
       ;;
     default | uninstall | update)
       _arguments '1:version:_pymac_list_versions'

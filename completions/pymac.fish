@@ -17,12 +17,15 @@ function __list-pyenv-symlinks
 end
 
 # Top-level commands
-set -l pymac_commands certifi-update clear-cache default default-which \
+set -l pymac_commands certifi-update certifi-update-all clear-cache default default-which \
     exec help install list pyenv uninstall update update-all upgrade
 
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a certifi-update \
     -d 'Update/install and symlink SSL certificates in specified Python version'
+complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
+    -a certifi-update-all \
+    -d "Update certifi package for all Python versions installed via pymac"
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a clear-cache \
     -d "Delete downloaded PKG installers"
@@ -67,9 +70,6 @@ complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
 complete -x -c pymac -n "__fish_seen_subcommand_from certifi-update; \
     and not __fish_seen_subcommand_from (pymac list)" \
     -a "(pymac list)"
-complete -x -c pymac -n "__fish_seen_subcommand_from certifi-update" \
-    -a --all \
-    -d "Update certifi for all installed Python versions"
 complete -x -c pymac -n "__fish_seen_subcommand_from default; \
     and not __fish_seen_subcommand_from (pymac list)" \
     -a "(pymac list)"

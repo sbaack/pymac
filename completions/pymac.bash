@@ -23,7 +23,7 @@ _pymac() {
   local cur prev words cword
   _init_completion || return
 
-  local commands="certifi-update clear-cache default default-which exec help install list pyenv uninstall update update-all upgrade"
+  local commands="certifi-update certifi-update-all clear-cache default default-which exec help install list pyenv uninstall update update-all upgrade"
 
   # Find the subcommand (first non-option word after pymac)
   local subcmd=""
@@ -50,7 +50,7 @@ _pymac() {
 
   case "$subcmd" in
   certifi-update)
-    COMPREPLY=($(compgen -W "--all -a $(_pymac_list_versions)" -- "$cur"))
+    COMPREPLY=($(compgen -W "$(_pymac_list_versions)" -- "$cur"))
     ;;
   default | uninstall | update)
     COMPREPLY=($(compgen -W "$(_pymac_list_versions)" -- "$cur"))

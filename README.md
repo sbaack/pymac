@@ -207,6 +207,7 @@ Usage: pymac <command> [<args>]
 
 Commands:
   certifi-update: Update/install and symlink SSL certificates in specified Python version
+  certifi-update-all: Update certifi package for all Python versions installed via pymac
   clear-cache:    Delete downloaded PKG installers
   default:        Set Python version symlinked to ~/.config/pymac/default
   default-which:  Show path to Python version symlinked to ~/.config/pymac/default
