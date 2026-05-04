@@ -22,10 +22,10 @@ download_installer() {
   # Make sure cache dir exists
   mkdir -p "$cache_dir"
   local url
-  # If a Python dev version was provided (e.g. 3.11.0a6), extract
-  # the version number without the appended 'aX', 'bX' or 'rcX'
+  # If a Python dev version was provided (e.g. 3.11.0a6, 3.14.5rc1),
+  # extract the version number without the appended 'aX', 'bX' or 'rcX'
   # to correctly build URL
-  if [[ "$py_version_long" =~ ^([0-9][.][0-9]{1,2}[.]0)([a-z]{1,2}[0-9]{1,2})$ ]]; then
+  if [[ "$py_version_long" =~ ^([0-9][.][0-9]{1,2}[.][0-9]{1,2})([a-z]{1,2}[0-9]{1,2})$ ]]; then
     url=https://www.python.org/ftp/python/${BASH_REMATCH[1]}/"$pkg"
   else
     url=https://www.python.org/ftp/python/"$py_version_long"/"$pkg"

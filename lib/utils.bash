@@ -17,9 +17,9 @@ py_valid() {
   # Validate Python version provided. Accepted formats:
   # MAJOR.MINOR                  (e.g. 3.10)
   # MAJOR.MINOR.MICRO            (e.g. 3.10.3)
-  # MAJOR.MINOR.MICROdev-version (e.g. 3.11.0a6)
+  # MAJOR.MINOR.MICROdev-version (e.g. 3.11.0a6, 3.14.5rc1)
   local py_version="$1"
-  [[ $py_version =~ ^3[.][0-9]{1,2}([.]0[a-z]{1,2}[0-9]{1,2}|[.][0-9]{1,2})?$ ]]
+  [[ $py_version =~ ^3[.][0-9]{1,2}([.][0-9]{1,2}([a-z]{1,2}[0-9]{1,2})?)?$ ]]
 }
 
 is_installed() {
