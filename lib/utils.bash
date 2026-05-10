@@ -85,13 +85,25 @@ _scrape_pkg_versions() {
       printf "Could not reach python.org. Check your internet connection.\n" >&2
       return 1
     fi
-    local pkg_name
-    pkg_name=$(
+    local pkg_list pkg_name
+    pkg_list=$(
       printf "%s" "$pkg_html" |
-        sed -n 's/.*href="\(python-[^"]*-macos[^"]*\.pkg\)".*/\1/p' |
+        sed -n 's/.*href="\(python-[^"]*-macos[^"]*\.pkg\)".*/\1/p'
+    )
+    # Prefer final releases over pre-releases when both share a directory
+    # (e.g. /3.14.5/ contains both python-3.14.5-macos11.pkg and
+    # python-3.14.5rc1-macos11.pkg). Lex sort would otherwise rank the rc
+    # higher because '-' < 'r' in ASCII. A final release filename has a
+    # digit immediately before "-macos"; pre-releases have a letter there.
+    pkg_name=$(
+      printf "%s\n" "$pkg_list" |
+        grep -E 'python-[0-9][0-9.]*-macos' |
         sort -r |
         head -1
     )
+    if [[ -z $pkg_name ]]; then
+      pkg_name=$(printf "%s\n" "$pkg_list" | sort -r | head -1)
+    fi
     if [[ -n $pkg_name ]]; then
       # Extract the version string from the PKG filename, which may
       # include pre-release suffixes (e.g. "3.15.0a8" from
