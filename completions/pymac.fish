@@ -17,7 +17,7 @@ function __list-pyenv-symlinks
 end
 
 # Top-level commands
-set -l pymac_commands certifi-update certifi-update-all clear-cache default default-which \
+set -l pymac_commands certifi-update certifi-update-all clear-cache completions default default-which \
     exec help install list pyenv self-update uninstall update update-all
 
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
@@ -29,6 +29,12 @@ complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a clear-cache \
     -d "Delete downloaded PKG installers"
+complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
+    -a completions \
+    -d "Print shell completion script"
+complete -x -c pymac -n "__fish_seen_subcommand_from completions; \
+    and not __fish_seen_subcommand_from bash fish zsh" \
+    -a "bash fish zsh"
 complete -f -c pymac -n "not __fish_seen_subcommand_from $pymac_commands" \
     -a default \
     -d "Set Python version symlinked to ~/.config/pymac/default"

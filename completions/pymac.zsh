@@ -28,6 +28,7 @@ _pymac() {
     'certifi-update:Update/install and symlink SSL certificates in specified Python version'
     'certifi-update-all:Update certifi package for all Python versions installed via pymac'
     'clear-cache:Delete downloaded PKG installers'
+    'completions:Print shell completion script'
     'default:Set Python version symlinked to ~/.config/pymac/default'
     'default-which:Show Python version symlinked to ~/.config/pymac/default'
     'exec:Directly call specified Python version'
@@ -59,6 +60,9 @@ _pymac() {
       ;;
     exec)
       _arguments '1:version:_pymac_list_versions' '*:arguments:_files'
+      ;;
+    completions)
+      _arguments '1:shell:(bash fish zsh)'
       ;;
     default-which)
       _arguments '--bare[Only show version number instead of full path]'

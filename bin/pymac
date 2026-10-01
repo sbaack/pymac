@@ -10,6 +10,7 @@ help() {
   printf "  certifi-update:     Update/install and symlink SSL certificates in specified Python version\n"
   printf "  certifi-update-all: Update certifi package for all Python versions installed via pymac\n"
   printf "  clear-cache:        Delete downloaded PKG installers\n"
+  printf "  completions:        Print shell completion script (bash, fish, zsh)\n"
   printf "  default:            Set Python version symlinked to ~/.config/pymac/default\n"
   printf "  default-which:      Show path to Python version symlinked to ~/.config/pymac/default\n"
   printf "  exec:               Directly call specified Python version\n"
@@ -63,7 +64,7 @@ pymac_cmd() {
       fi
       break
       ;;
-    certifi-update-all | clear-cache | default-which | install | list | pyenv | self-update | update-all)
+    certifi-update-all | clear-cache | completions | default-which | install | list | pyenv | self-update | update-all)
       shift
       # shellcheck disable=1090
       . "$(pymac_dir)"/commands/"$command".bash "$@"

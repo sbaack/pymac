@@ -23,7 +23,7 @@ _pymac() {
   local cur prev words cword
   _init_completion || return
 
-  local commands="certifi-update certifi-update-all clear-cache default default-which exec help install list pyenv self-update uninstall update update-all"
+  local commands="certifi-update certifi-update-all clear-cache completions default default-which exec help install list pyenv self-update uninstall update update-all"
 
   # Find the subcommand (first non-option word after pymac)
   local subcmd=""
@@ -60,6 +60,9 @@ _pymac() {
     if [[ $((i + 1)) -eq $cword ]]; then
       COMPREPLY=($(compgen -W "$(_pymac_list_versions)" -- "$cur"))
     fi
+    ;;
+  completions)
+    COMPREPLY=($(compgen -W "bash fish zsh" -- "$cur"))
     ;;
   default-which)
     COMPREPLY=($(compgen -W "--bare" -- "$cur"))

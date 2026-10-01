@@ -144,21 +144,21 @@ set -x PATH ~/.local/bin "$PATH"
 For zsh, add this to your `~/.zshrc` (after `compinit`):
 
 ```bash
-[[ -e "$HOME/.pymac/completions/pymac.zsh" ]] && source "$HOME/.pymac/completions/pymac.zsh"
+eval "$(pymac completions zsh)"
 ```
 
 For bash, add this to your `~/.bashrc`:
 
 ```bash
-[[ -e "$HOME/.pymac/completions/pymac.bash" ]] && source "$HOME/.pymac/completions/pymac.bash"
+eval "$(pymac completions bash)"
 ```
 
 Note: The bash completions require bash 4.0+. macOS ships with bash 3. If you're using bash on macOS, install a newer version via [Homebrew](https://brew.sh/) (`brew install bash`).
 
-For fish:
+For fish, run this once:
 
 ```bash
-mkdir -p ~/.config/fish/completions; and ln -s -f ~/.pymac/completions/pymac.fish ~/.config/fish/completions/
+mkdir -p ~/.config/fish/completions; and echo 'pymac completions fish | source' > ~/.config/fish/completions/pymac.fish
 ```
 
 ## Why?
@@ -206,19 +206,20 @@ Install and manage Python.org macOS installers from the command line.
 Usage: pymac <command> [<args>]
 
 Commands:
-  certifi-update: Update/install and symlink SSL certificates in specified Python version
+  certifi-update:     Update/install and symlink SSL certificates in specified Python version
   certifi-update-all: Update certifi package for all Python versions installed via pymac
-  clear-cache:    Delete downloaded PKG installers
-  default:        Set Python version symlinked to ~/.config/pymac/default
-  default-which:  Show path to Python version symlinked to ~/.config/pymac/default
-  exec:           Directly call specified Python version
-  install:        Download and (re)install Python version
-  list:           List Python versions installed via Python.org installer
-  pyenv:          Manage symlinks of Python.org installations in $PYENV_ROOT/versions
-  self-update:    Update pymac itself to the latest HEAD version
-  uninstall:      Remove Python version
-  update:         Update specified Python to the latest available Micro version (e.g. updates 3.10.1 to 3.10.2)
-  update-all:     Update all pymac installs to latest available Micro versions
+  clear-cache:        Delete downloaded PKG installers
+  completions:        Print shell completion script (bash, fish, zsh)
+  default:            Set Python version symlinked to ~/.config/pymac/default
+  default-which:      Show path to Python version symlinked to ~/.config/pymac/default
+  exec:               Directly call specified Python version
+  install:            Download and (re)install Python version
+  list:               List Python versions installed via Python.org installer
+  pyenv:              Manage symlinks of Python.org installations in $PYENV_ROOT/versions
+  self-update:        Update pymac itself to the latest HEAD version
+  uninstall:          Remove Python version
+  update:             Update specified Python to the latest available Micro version (e.g. updates 3.10.1 to 3.10.2)
+  update-all:         Update all pymac installs to latest available Micro versions
 
 See 'pymac <command> help' for more information.
 ```
